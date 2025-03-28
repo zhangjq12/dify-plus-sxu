@@ -21,6 +21,7 @@ from core.model_runtime.entities.text_embedding_entities import EmbeddingUsage, 
 from core.model_runtime.errors.validate import CredentialsValidateFailedError
 from core.model_runtime.model_providers.__base.text_embedding_model import TextEmbeddingModel
 from core.model_runtime.model_providers.openai_api_compatible._common import _CommonOaiApiCompat
+from core.model_runtime.entities.llm_entities import LLMUsage # Extend: Supplier model billing logic modification
 
 
 class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
@@ -74,6 +75,7 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
         inputs = []
         indices = []
         used_tokens = 0
+        completion_tokens = 0  # Extend: Supplier model billing logic modification
 
         for i, text in enumerate(texts):
             # Here token count is only an approximation based on the GPT2 tokenizer
@@ -103,13 +105,16 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
 
             # Extract embeddings and used tokens from the response
             embeddings_batch = [data["embedding"] for data in response_data["data"]]
+            completion_used_tokens = response_data["usage"]["completion_tokens"] # Extend: Supplier model billing logic modification
             embedding_used_tokens = response_data["usage"]["total_tokens"]
 
             used_tokens += embedding_used_tokens
             batched_embeddings += embeddings_batch
+            completion_tokens += completion_used_tokens # Extend: Supplier model billing logic modification
 
         # calc usage
-        usage = self._calc_response_usage(model=model, credentials=credentials, tokens=used_tokens)
+        usage = self._calc_response_usage(
+                    model=model, credentials=credentials, tokens=used_tokens, completion=completion_tokens) # Extend: Supplier model billing logic modification
 
         return TextEmbeddingResult(embeddings=batched_embeddings, usage=usage, model=model)
 
@@ -194,7 +199,7 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
 
         return entity
 
-    def _calc_response_usage(self, model: str, credentials: dict, tokens: int) -> EmbeddingUsage:
+    def _calc_response_usage(self, model: str, credentials: dict, tokens: int, completion: int) -> LLMUsage:
         """
         Calculate response usage
 
@@ -208,15 +213,28 @@ class OAICompatEmbeddingModel(_CommonOaiApiCompat, TextEmbeddingModel):
             model=model, credentials=credentials, price_type=PriceType.INPUT, tokens=tokens
         )
 
+        # Extend: Start Supplier model billing logic modification
+
+        # get out price info
+        completion_price_info = self.get_price(
+            model=model, credentials=credentials, price_type=PriceType.OUTPUT, tokens=completion
+        )
+
         # transform usage
-        usage = EmbeddingUsage(
+        usage = LLMUsage(
             tokens=tokens,
-            total_tokens=tokens,
-            unit_price=input_price_info.unit_price,
-            price_unit=input_price_info.unit,
-            total_price=input_price_info.total_amount,
+            completion_tokens=completion,
+            total_tokens=tokens + completion,
+            prompt_unit_price=input_price_info.unit_price,
+            prompt_price_unit=input_price_info.unit,
+            prompt_price=input_price_info.total_amount,
+            completion_unit_price=completion_price_info.unit_price,
+            completion_price_unit=completion_price_info.unit,
+            completion_price=completion_price_info.total_amount,
+            total_price=input_price_info.total_amount + completion_price_info.total_amount,
             currency=input_price_info.currency,
             latency=time.perf_counter() - self.started_at,
         )
+        # Extend: Stop Supplier model billing logic modification
 
         return usage

@@ -1,12 +1,22 @@
 .githubIcon {
-  background: center/contain url('./assets/github.svg');
+    background: center/contain url('./assets/github.svg');
 }
 
 .googleIcon {
-  background: center/contain url('./assets/google.svg');
+    background: center/contain url('./assets/google.svg');
+}
+
+/* Extend: start 钉钉快捷登录按钮 */
+.dingIcon {
+    background: center/contain url('./assets/ding.svg');
+}
+/* Extend: stop 钉钉快捷登录按钮 */
+
+.oauth2Icon {
+    background: center/contain url('./assets/oauth2.svg');
 }
 
 .background {
-  background-image: url('./assets/background.png');
-  background-size: cover;
+    background-image: url('./assets/background.png');
+    background-size: cover;
 }

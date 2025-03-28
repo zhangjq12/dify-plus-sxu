@@ -1,5 +1,7 @@
 from textwrap import dedent
 
+from sympy import false
+
 from core.helper.code_executor.code_executor import CodeExecutor, CodeLanguage
 from core.helper.code_executor.javascript.javascript_code_provider import JavascriptCodeProvider
 from core.helper.code_executor.javascript.javascript_transformer import NodeJsTemplateTransformer
@@ -9,7 +11,7 @@ CODE_LANGUAGE = CodeLanguage.JAVASCRIPT
 
 def test_javascript_plain():
     code = 'console.log("Hello World")'
-    result_message = CodeExecutor.execute_code(language=CODE_LANGUAGE, preload="", code=code)
+    result_message = CodeExecutor.execute_code(purview=False, language=CODE_LANGUAGE, preload="", code=code)
     assert result_message == "Hello World\n"
 
 
@@ -18,7 +20,7 @@ def test_javascript_json():
     obj = {'Hello': 'World'}
     console.log(JSON.stringify(obj))
     """)
-    result = CodeExecutor.execute_code(language=CODE_LANGUAGE, preload="", code=code)
+    result = CodeExecutor.execute_code(purview=False, language=CODE_LANGUAGE, preload="", code=code)
     assert result == '{"Hello":"World"}\n'
 
 

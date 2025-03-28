@@ -56,14 +56,15 @@ class CodeExecutor:
     supported_dependencies_languages: set[CodeLanguage] = {CodeLanguage.PYTHON3}
 
     @classmethod
-    def execute_code(cls, language: CodeLanguage, preload: str, code: str) -> str:
+    def execute_code(cls, purview: bool, language: CodeLanguage, preload: str, code: str) -> str:
         """
         Execute code
+        :param purview: bool # Extend global code
         :param language: code language
         :param code: code
         :return:
         """
-        url = URL(str(dify_config.CODE_EXECUTION_ENDPOINT)) / "v1" / "sandbox" / "run"
+        url = URL(dify_config.FULL_CODE_EXECUTION_ENDPOINT if purview else str(dify_config.CODE_EXECUTION_ENDPOINT)) / "v1" / "sandbox" / "run"  # Extend global code
 
         headers = {"X-Api-Key": dify_config.CODE_EXECUTION_API_KEY}
 
@@ -118,12 +119,13 @@ class CodeExecutor:
         return response_code.data.stdout or ""
 
     @classmethod
-    def execute_workflow_code_template(cls, language: CodeLanguage, code: str, inputs: Mapping[str, Any]):
+    def execute_workflow_code_template(cls, language: CodeLanguage, code: str, inputs: Mapping[str, Any], purview: bool = False):  # Extend global code
         """
         Execute code
         :param language: code language
         :param code: code
         :param inputs: inputs
+        :param purview: bool = False
         :return:
         """
         template_transformer = cls.code_template_transformers.get(language)
@@ -133,7 +135,7 @@ class CodeExecutor:
         runner, preload = template_transformer.transform_caller(code, inputs)
 
         try:
-            response = cls.execute_code(language, preload, runner)
+            response = cls.execute_code(purview, language, preload, runner)
         except CodeExecutionError as e:
             raise e
 

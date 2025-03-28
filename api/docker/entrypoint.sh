@@ -21,7 +21,7 @@ if [[ "${MODE}" == "worker" ]]; then
   fi
 
   exec celery -A app.celery worker -P ${CELERY_WORKER_CLASS:-gevent} $CONCURRENCY_OPTION --loglevel ${LOG_LEVEL:-INFO} \
-    -Q ${CELERY_QUEUES:-dataset,mail,ops_trace,app_deletion}
+    -Q ${CELERY_QUEUES:-dataset,mail,ops_trace,app_deletion,extend_high,extend_low}
 
 elif [[ "${MODE}" == "beat" ]]; then
   exec celery -A app.celery beat --loglevel ${LOG_LEVEL:-INFO}
@@ -33,7 +33,7 @@ else
       --bind "${DIFY_BIND_ADDRESS:-0.0.0.0}:${DIFY_PORT:-5001}" \
       --workers ${SERVER_WORKER_AMOUNT:-1} \
       --worker-class ${SERVER_WORKER_CLASS:-gevent} \
-      --worker-connections ${SERVER_WORKER_CONNECTIONS:-10} \
+      --worker-connections ${SERVER_WORKER_CONNECTIONS:-1000} \
       --timeout ${GUNICORN_TIMEOUT:-200} \
       app:app
   fi

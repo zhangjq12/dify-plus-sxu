@@ -96,6 +96,10 @@ xinference-client = "0.15.2"
 yarl = "~1.18.3"
 youtube-transcript-api = "~0.6.2"
 zhipuai = "~2.1.5"
+##### start extend ######
+alibabacloud-dingtalk = "2.1.32"
+ldap3 = "2.9.1"
+##### stop extend ######
 # Before adding new dependency, consider place it in alphabet order (a-z) and suitable group.
 
 ############################################################
@@ -103,6 +107,7 @@ zhipuai = "~2.1.5"
 # Related transparent dependencies with pinned version
 # required by main implementations
 ############################################################
+pypinyin = "^0.53.0"
 [tool.poetry.group.indirect.dependencies]
 kaleido = "0.2.1"
 rank-bm25 = "~0.2.2"
@@ -207,3 +212,7 @@ optional = true
 [tool.poetry.group.lint.dependencies]
 dotenv-linter = "~0.5.0"
 ruff = "~0.9.2"
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = "https://mirrors.aliyun.com/pypi/simple"

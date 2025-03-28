@@ -16,6 +16,14 @@ const SwrInitor = ({
   const searchParams = useSearchParams()
   const consoleToken = decodeURIComponent(searchParams.get('access_token') || '')
   const refreshToken = decodeURIComponent(searchParams.get('refresh_token') || '')
+  // Extend Start DingTalk login compatible
+  const console_token = decodeURIComponent(searchParams.get('console_token') || '')
+  if (localStorage) {
+    consoleToken && localStorage?.setItem('console_token', consoleToken)
+    refreshToken && localStorage?.setItem('refresh_token', refreshToken)
+    console_token && localStorage?.setItem('console_token', console_token)
+  }
+  // Extend Stop DingTalk login compatible
   const consoleTokenFromLocalStorage = localStorage?.getItem('console_token')
   const refreshTokenFromLocalStorage = localStorage?.getItem('refresh_token')
   const pathname = usePathname()

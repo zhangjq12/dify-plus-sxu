@@ -42,6 +42,8 @@ from core.model_runtime.errors.validate import CredentialsValidateFailedError
 from core.model_runtime.model_providers.__base.large_language_model import LargeLanguageModel
 from core.model_runtime.model_providers.bedrock.get_bedrock_client import get_bedrock_client
 
+from configs import dify_config
+
 logger = logging.getLogger(__name__)
 ANTHROPIC_BLOCK_MODE_PROMPT = """You should always follow the instructions and output a valid {{block}} object.
 The structure of the {{block}} object you can found in the instructions, use {"answer": "$your_answer"} as the default structure
@@ -676,6 +678,13 @@ class BedrockLargeLanguageModel(LargeLanguageModel):
         :return: full response or stream response chunk generator result
         """
         client_config = Config(region_name=credentials["aws_region"])
+
+        # 二开部分 加上代理
+        if dify_config.BEDROCK_PROXY:
+            client_config = Config(region_name=credentials["aws_region"], proxies={
+                'http': 'http://' + dify_config.BEDROCK_PROXY,
+                'https': 'http://' + dify_config.BEDROCK_PROXY
+            })
 
         runtime_client = boto3.client(
             service_name="bedrock-runtime",

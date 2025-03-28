@@ -24,10 +24,10 @@ type IInviteModalProps = {
 }
 
 const InviteModal = ({
-  isEmailSetup,
-  onCancel,
-  onSend,
-}: IInviteModalProps) => {
+                       isEmailSetup,
+                       onCancel,
+                       onSend,
+                     }: IInviteModalProps) => {
   const { t } = useTranslation()
   const [emails, setEmails] = useState<string[]>([])
   const { notify } = useContext(ToastContext)

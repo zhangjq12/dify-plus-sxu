@@ -15,7 +15,7 @@ def test_jinja2():
         .replace(Jinja2TemplateTransformer._inputs_placeholder, inputs)
     )
     result = CodeExecutor.execute_code(
-        language=CODE_LANGUAGE, preload=Jinja2TemplateTransformer.get_preload_script(), code=code
+        purview=False, language=CODE_LANGUAGE, preload=Jinja2TemplateTransformer.get_preload_script(), code=code
     )
     assert result == "<<RESULT>>Hello World<<RESULT>>\n"
 

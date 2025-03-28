@@ -9,6 +9,7 @@ from .enterprise import EnterpriseFeatureConfig
 from .extra import ExtraServiceConfig
 from .feature import FeatureConfig
 from .middleware import MiddlewareConfig
+from .extend import ExtendConfig # 二开部分 新增配置
 from .packaging import PackagingInfo
 from .remote_settings_sources import RemoteSettingsSource, RemoteSettingsSourceConfig, RemoteSettingsSourceName
 from .remote_settings_sources.apollo import ApolloSettingsSource
@@ -64,6 +65,8 @@ class DifyConfig(
     # Enterprise feature configs
     # **Before using, please contact business@dify.ai by email to inquire about licensing matters.**
     EnterpriseFeatureConfig,
+    # 二开部分 新增配置
+    ExtendConfig,
 ):
     model_config = SettingsConfigDict(
         # read from dotenv format config file

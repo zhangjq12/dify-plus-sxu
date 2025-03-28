@@ -3,7 +3,7 @@ import logging
 import threading
 import uuid
 from collections.abc import Generator, Mapping, Sequence
-from typing import Any, Literal, Optional, Union, overload
+from typing import Any, Literal, Optional, Union, overload, cast # 二开部分 - 密钥额度限制，新增cast
 
 from flask import Flask, current_app
 from pydantic import ValidationError
@@ -24,7 +24,7 @@ from core.model_runtime.errors.invoke import InvokeAuthorizationError
 from core.ops.ops_trace_manager import TraceQueueManager
 from extensions.ext_database import db
 from factories import file_factory
-from models import Account, App, EndUser, Workflow
+from models import Account, ApiToken, App, EndUser, Workflow  # 二开部分 - 密钥额度限制，新增ApiToken
 
 logger = logging.getLogger(__name__)
 
@@ -108,6 +108,14 @@ class WorkflowAppGenerator(BaseAppGenerator):
 
         inputs: Mapping[str, Any] = args["inputs"]
         workflow_run_id = str(uuid.uuid4())
+        # ------------------- 二开部分Begin - 密钥额度限制 -------------------
+        extras = {}
+        api_token = args.get("api_token")
+        if api_token:
+            cast(ApiToken, api_token)
+            extras["app_token_id"] = api_token.id
+        # ------------------- 二开部分End - 密钥额度限制
+
         # init application generate entity
         application_generate_entity = WorkflowAppGenerateEntity(
             task_id=str(uuid.uuid4()),
@@ -123,6 +131,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
             call_depth=call_depth,
             trace_manager=trace_manager,
             workflow_run_id=workflow_run_id,
+            extras=extras,  # 二开部分 - 密钥额度限制
         )
         contexts.tenant_id.set(application_generate_entity.app_config.tenant_id)
 

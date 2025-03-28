@@ -9,7 +9,7 @@ CODE_LANGUAGE = CodeLanguage.PYTHON3
 
 def test_python3_plain():
     code = 'print("Hello World")'
-    result = CodeExecutor.execute_code(language=CODE_LANGUAGE, preload="", code=code)
+    result = CodeExecutor.execute_code(purview=False, language=CODE_LANGUAGE, preload="", code=code)
     assert result == "Hello World\n"
 
 
@@ -18,7 +18,7 @@ def test_python3_json():
     import json
     print(json.dumps({'Hello': 'World'}))
     """)
-    result = CodeExecutor.execute_code(language=CODE_LANGUAGE, preload="", code=code)
+    result = CodeExecutor.execute_code(purview=False, language=CODE_LANGUAGE, preload="", code=code)
     assert result == '{"Hello": "World"}\n'
 
 

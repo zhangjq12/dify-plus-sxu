@@ -31,6 +31,10 @@ export type SystemFeatures = {
   is_allow_register: boolean
   is_email_setup: boolean
   license: License
+  is_custom_auth2: string // extend: Customizing AUTH2
+  ding_talk_client_id: string // Extend: DingTalk third-party login
+  ding_talk_corp_id: string // Extend: DingTalk sidebar login
+  ding_talk: boolean // Extend: switch DingTalk sidebar login
 }
 
 export const defaultSystemFeatures: SystemFeatures = {
@@ -49,4 +53,8 @@ export const defaultSystemFeatures: SystemFeatures = {
     status: LicenseStatus.NONE,
     expired_at: '',
   },
+  is_custom_auth2: '', // extend: Customizing AUTH2
+  ding_talk_client_id: '', // Extend: DingTalk third-party login
+  ding_talk_corp_id: '', // Extend: DingTalk sidebar login
+  ding_talk: false, // Extend: switch DingTalk sidebar login
 }

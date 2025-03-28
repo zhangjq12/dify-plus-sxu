@@ -4,6 +4,7 @@ import {
   useState,
 } from 'react'
 import { useAsyncEffect } from 'ahooks'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useThemeContext } from '../embedded-chatbot/theme/theme-context'
 import {
   ChatWithHistoryContext,
@@ -188,9 +189,12 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   installedAppInfo,
   className,
 }) => {
+  const router = useRouter() // start You must log in to access your account extend
+  const searchParams = useSearchParams() // start You must log in to access your account extend
   const [initialized, setInitialized] = useState(false)
   const [appUnavailable, setAppUnavailable] = useState<boolean>(false)
   const [isUnknownReason, setIsUnknownReason] = useState<boolean>(false)
+  const [hasToken, setHasToken] = useState<boolean>(true)
 
   useAsyncEffect(async () => {
     if (!initialized) {
@@ -212,7 +216,22 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
     }
   }, [])
 
-  if (!initialized)
+  // ------------------------ start You must log in to access your account extend ------------------------
+  // fix: window is not defined
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const consoleToken = searchParams.get('console_token')
+      const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
+      if (!(consoleToken || consoleTokenFromLocalStorage)) {
+        localStorage.setItem('redirect_url', window.location.href)
+        router.replace('/signin')
+        setHasToken(false)
+      }
+    }
+  }, [router, searchParams])
+  // ------------------------ end You must log in to access your account extend ------------------------
+
+  if (!initialized || !hasToken)
     return null
 
   if (appUnavailable)

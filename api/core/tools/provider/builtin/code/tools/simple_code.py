@@ -17,6 +17,6 @@ class SimpleCode(BuiltinTool):
         if language not in {CodeLanguage.PYTHON3, CodeLanguage.JAVASCRIPT}:
             raise ValueError(f"Only python3 and javascript are supported, not {language}")
 
-        result = CodeExecutor.execute_code(language, "", code)
+        result = CodeExecutor.execute_code(False, language, "", code)
 
         return self.create_text_message(result)

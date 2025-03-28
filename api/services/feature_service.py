@@ -3,8 +3,10 @@ from enum import StrEnum
 from pydantic import BaseModel, ConfigDict
 
 from configs import dify_config
+from extensions.ext_database import db
 from services.billing_service import BillingService
 from services.enterprise.enterprise_service import EnterpriseService
+from models.system_extend import SystemIntegrationExtend, SystemIntegrationClassify # Extend DingTalk third-party login
 
 
 class SubscriptionModel(BaseModel):
@@ -65,6 +67,10 @@ class SystemFeatureModel(BaseModel):
     is_allow_create_workspace: bool = False
     is_email_setup: bool = False
     license: LicenseModel = LicenseModel()
+    is_custom_auth2: str = ""  # extend: Customizing AUTH2
+    ding_talk_client_id: str = "" # extend: DingTalk third-party login
+    ding_talk_corp_id: str = "" # extend: DingTalk sidebar login
+    ding_talk: bool = "" # extend: DingTalk sidebar login
 
 
 class FeatureService:
@@ -100,6 +106,16 @@ class FeatureService:
         system_features.is_allow_register = dify_config.ALLOW_REGISTER
         system_features.is_allow_create_workspace = dify_config.ALLOW_CREATE_WORKSPACE
         system_features.is_email_setup = dify_config.MAIL_TYPE is not None and dify_config.MAIL_TYPE != ""
+        # extend start: Customizing AUTH2
+        system_features.is_custom_auth2 = dify_config.OAUTH2_CLIENT_URL
+        # extend stop: Customizing AUTH2
+        # extend start: DingTalk third-party login
+        for i in db.session.query(SystemIntegrationExtend).filter(SystemIntegrationExtend.status == True).all():
+            if i.classify == SystemIntegrationClassify.SYSTEM_INTEGRATION_DINGTALK:
+                system_features.ding_talk_client_id = i.app_key
+                system_features.ding_talk_corp_id = i.corp_id
+                system_features.ding_talk = i.status
+        # extend stop: DingTalk third-party login
 
     @classmethod
     def _fulfill_params_from_env(cls, features: FeatureModel):
