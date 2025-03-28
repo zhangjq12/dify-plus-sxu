@@ -12,6 +12,7 @@ from controllers.web.error import (
     ProviderNotInitializeError,
     ProviderQuotaExceededError,
 )
+from controllers.web.error import InvokeRateLimitError as InvokeRateLimitHttpError
 from controllers.web.error_extend import (
     AccountNoMoneyErrorExtend,  # You must log in to access your account extend
     WebAuthRequiredErrorExtend,
@@ -28,6 +29,7 @@ from core.model_runtime.errors.invoke import InvokeError
 from libs import helper
 from models.model import App, AppMode, EndUser
 from services.app_generate_service import AppGenerateService
+from services.errors.llm import InvokeRateLimitError
 from services.app_generate_service_extend import (
     AppGenerateServiceExtend,  # Extend: App Center - Recommended list sorted by usage frequency
 )
@@ -79,9 +81,11 @@ class WorkflowRunApi(WebApiResource):
             raise ProviderModelCurrentlyNotSupportError()
         except InvokeError as e:
             raise CompletionRequestError(e.description)
+        except InvokeRateLimitError as ex:
+            raise InvokeRateLimitHttpError(ex.description)
         except ValueError as e:
             raise e
-        except Exception as e:
+        except Exception:
             logging.exception("internal server error.")
             raise InternalServerError()
 

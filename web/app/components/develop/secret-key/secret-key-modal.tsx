@@ -168,54 +168,50 @@ const SecretKeyModal = ({
   }
 
   return (
-    <Modal isShow={isShow} onClose={onClose} title={`${t('appApi.apiKeyModal.apiSecretKey')}`} className={`${s.customModalExtend} px-8 flex flex-col`}> {/* 二开部分 - 密钥额度限制，由customModal 改为 customModalExtend */}
-      <XMarkIcon className={`w-6 h-6 absolute cursor-pointer text-gray-500 ${s.close}`} onClick={onClose} />
-      <p className='mt-1 text-[13px] text-gray-500 font-normal leading-5 flex-shrink-0'>{t('appApi.apiKeyModal.apiSecretKeyTips')}</p>
+    <Modal isShow={isShow} onClose={onClose} title={`${t('appApi.apiKeyModal.apiSecretKey')}`} className={`${s.customModalExtend} flex flex-col px-8`}> {/* 二开部分 - 密钥额度限制，由customModal 改为 customModalExtend */}
+      <XMarkIcon className={`absolute h-6 w-6 cursor-pointer text-text-tertiary ${s.close}`} onClick={onClose} />
+      <p className='mt-1 shrink-0 text-[13px] font-normal leading-5 text-text-tertiary'>{t('appApi.apiKeyModal.apiSecretKeyTips')}</p>
       {!apiKeysList && <div className='mt-4'><Loading /></div>}
       {
         !!apiKeysList?.data?.length && (
-          <div className='flex flex-col flex-grow mt-4 overflow-hidden'>
-            <div className='flex items-center flex-shrink-0 text-xs font-semibold text-gray-500 border-b border-solid h-9'>
-              <div className='flex-shrink-0 w-64 px-3'>{t('appApi.apiKeyModal.secretKey')}</div>
-              <div className='flex-shrink-0 px-3 w-[150px]'>{t('appApi.apiKeyModal.created')}</div>
-              <div className='flex-shrink-0 px-3 w-[150px]'>{t('appApi.apiKeyModal.lastUsed')}</div>
+          <div className='mt-4 flex grow flex-col overflow-hidden'>
+            <div className='flex h-9 shrink-0 items-center border-b border-solid text-xs font-semibold text-text-tertiary'>
+              <div className='w-64 shrink-0 px-3'>{t('appApi.apiKeyModal.secretKey')}</div>
+              <div className='w-[150px] shrink-0 px-3'>{t('appApi.apiKeyModal.created')}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
+              <div className='w-[150px] shrink-0 px-3'>{t('appApi.apiKeyModal.lastUsed')}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
               {/* ---------------------- 二开部分Begin - 密钥额度限制 ---------------------- */}
-              <div className='flex-shrink-0 px-3 w-[100px]'>{t('extend.apiKeyModal.descriptionPlaceholder')}</div>
-              <div className='flex-shrink-0 px-3 w-[200px]'>{t('extend.apiKeyModal.dayLimit')}</div>
-              <div className='flex-shrink-0 px-3 w-[200px]'>{t('extend.apiKeyModal.monthLimit')}</div>
-              <div className='flex-shrink-0 px-3 w-[200px]'>{t('extend.apiKeyModal.accumulatedLimit')}</div>
+              <div className='w-[100px] shrink-0 px-3'>{t('extend.apiKeyModal.descriptionPlaceholder')}</div>
+              <div className='w-[200px] shrink-0 px-3'>{t('extend.apiKeyModal.dayLimit')}</div>
+              <div className='w-[200px] shrink-0 px-3'>{t('extend.apiKeyModal.monthLimit')}</div>
+              <div className='w-[200px] shrink-0 px-3'>{t('extend.apiKeyModal.accumulatedLimit')}</div>
               {/* ---------------------- 二开部分End - 密钥额度限制 ---------------------- */}
-              <div className='flex-grow px-3'></div>
+              <div className='grow px-3'></div>
             </div>
-            <div className='flex-grow overflow-auto'>
+            <div className='grow overflow-auto'>
               {apiKeysList.data.map(api => (
-                <div className='flex items-center text-sm font-normal text-gray-700 border-b border-solid h-9' key={api.id}>
-                  <div className='flex-shrink-0 w-64 px-3 font-mono truncate'>{generateToken(api.token)}</div>
-                  <div className='flex-shrink-0 px-3 truncate w-[150px]'>{formatTime(Number(api.created_at), t('appLog.dateTimeFormat') as string)}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
-                  <div className='flex-shrink-0 px-3 truncate w-[150px]'>{api.last_used_at ? formatTime(Number(api.created_at), t('appLog.dateTimeFormat') as string) : t('appApi.never')}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
+                <div className='flex h-9 items-center border-b border-solid text-sm font-normal text-text-secondary' key={api.id}>
+                  <div className='w-64 shrink-0 truncate px-3 font-mono'>{generateToken(api.token)}</div>
+                  <div className='w-[150px] shrink-0 truncate px-3'>{formatTime(Number(api.created_at), t('appLog.dateTimeFormat') as string)}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
+                  <div className='w-[150px] shrink-0 truncate px-3'>{api.last_used_at ? formatTime(Number(api.last_used_at), t('appLog.dateTimeFormat') as string) : t('appApi.never')}</div>{/* 二开部分 - 密钥额度限制，调整宽度 200 改为 150 ---------------------- */}
                   {/* ---------------------- 二开部分Begin - 密钥额度限制 ---------------------- */}
-                  <div
-                    className='flex-shrink-0 px-3 truncate w-[100px]'>{api.description}</div>
-                  <div
-                    className='flex-shrink-0 px-3 truncate w-[200px]'>$ {api.day_used_quota} / {api.day_limit_quota === -1 ? t('extend.apiKeyModal.noLimit') : `$ ${api.day_limit_quota}`}</div>
-                  <div
-                    className='flex-shrink-0 px-3 truncate w-[200px]'>$ {api.month_used_quota} / {api.month_limit_quota === -1 ? t('extend.apiKeyModal.noLimit') : `$ ${api.month_limit_quota}`}</div>
-                  <div
-                    className='flex-shrink-0 px-3 truncate w-[200px]'>$ {api.accumulated_quota}</div>
+                  <div className='w-[100px] shrink-0 truncate px-3'>{api.description}</div>
+                  <div className='w-[200px] shrink-0 truncate px-3'>$ {api.day_used_quota} / {api.day_limit_quota === -1 ? t('extend.apiKeyModal.noLimit') : `$ ${api.day_limit_quota}`}</div>
+                  <div className='w-[200px] shrink-0 truncate px-3'>$ {api.month_used_quota} / {api.month_limit_quota === -1 ? t('extend.apiKeyModal.noLimit') : `$ ${api.month_limit_quota}`}</div>
+                  <div className='w-[200px] shrink-0 truncate px-3'>$ {api.accumulated_quota}</div>
                   {/* ---------------------- 二开部分End - 密钥额度限制 ---------------------- */}
-                  <div className='flex flex-grow px-3'>
+                  <div className='flex grow px-3'>
                     <Tooltip
                       popupContent={copyValue === api.token ? `${t('appApi.copied')}` : `${t('appApi.copy')}`}
                       popupClassName='mr-1'
                     >
-                      <div className={`flex items-center justify-center flex-shrink-0 w-6 h-6 mr-1 rounded-lg cursor-pointer hover:bg-gray-100 ${s.copyIcon} ${copyValue === api.token ? s.copied : ''}`} onClick={() => {
+                      <div className={`mr-1 flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-lg hover:bg-state-base-hover ${s.copyIcon} ${copyValue === api.token ? s.copied : ''}`} onClick={() => {
                         // setIsCopied(true)
                         copy(api.token)
                         setCopyValue(api.token)
                       }}></div>
                     </Tooltip>
                     {isCurrentWorkspaceManager
-                      && <div className={`flex items-center justify-center flex-shrink-0 w-6 h-6 rounded-lg cursor-pointer ${s.trashIcon}`} onClick={() => {
+                      && <div className={`flex h-6 w-6 shrink-0 cursor-pointer items-center justify-center rounded-lg ${s.trashIcon}`} onClick={() => {
                         setDelKeyId(api.id)
                         setShowConfirmDelete(true)
                       }}>
@@ -237,12 +233,12 @@ const SecretKeyModal = ({
         )
       }
       <div className='flex'>
-        <Button className={`flex flex-shrink-0 mt-4 ${s.autoWidth}`} onClick={openSecretKeyQuotaSetModalExtend} disabled={ !currentWorkspace || !isCurrentWorkspaceManager}> {/* 二开部分Begin - 密钥额度限制由onClick改为openSecretKeyQuotaSetModalExtend */}
-          <PlusIcon className='flex flex-shrink-0 w-4 h-4' />
-          <div className='text-xs font-medium text-gray-800'>{t('appApi.apiKeyModal.createNewSecretKey')}</div>
+        <Button className={`mt-4 flex shrink-0 ${s.autoWidth}`} onClick={openSecretKeyQuotaSetModalExtend} disabled={ !currentWorkspace || !isCurrentWorkspaceManager}> {/* 二开部分Begin - 密钥额度限制由onClick改为openSecretKeyQuotaSetModalExtend */}
+          <PlusIcon className='mr-1 flex h-4 w-4 shrink-0' />
+          <div className='text-xs font-medium text-text-secondary'>{t('appApi.apiKeyModal.createNewSecretKey')}</div>
         </Button>
       </div>
-      <SecretKeyGenerateModal className='flex-shrink-0' isShow={isVisible} onClose={() => setVisible(false)} newKey={newKey} />
+      <SecretKeyGenerateModal className='shrink-0' isShow={isVisible} onClose={() => setVisible(false)} newKey={newKey} />
       {showConfirmDelete && (
         <Confirm
           title={`${t('appApi.actionMsg.deleteConfirmTitle')}`}
