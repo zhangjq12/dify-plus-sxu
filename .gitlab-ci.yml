@@ -20,8 +20,6 @@ workflow:
     - when: never
 
 default:
-  tags:
-    - docker
   before_script:
     - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
 
