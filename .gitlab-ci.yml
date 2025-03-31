@@ -21,7 +21,7 @@ workflow:
 
 default:
   before_script:
-    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $DOCKER_REGISTRY
+    - docker login ${DOCKER_REGISTRY} -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
 
 # 构建API镜像 - AMD64
 build-api-amd64:
