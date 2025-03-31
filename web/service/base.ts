@@ -359,13 +359,13 @@ export const ssePost = (
   } = otherOptions
   const abortController = new AbortController()
 
-  const token = localStorage.getItem('console_token')
+  const console_token = localStorage.getItem('console_token')
 
   const options = Object.assign({}, baseOptions, {
     method: 'POST',
     signal: abortController.signal,
     headers: new Headers({
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${console_token}`,
     }),
   } as RequestInit, fetchOptions)
 
