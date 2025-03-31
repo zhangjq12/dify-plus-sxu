@@ -131,6 +131,12 @@ qiniu:
     secret-key: ""
     use-https: false
     use-cdn-domains: false
+dify-redis:
+    name: ""
+    addr: redis:6379
+    password: difyai123456
+    db: 0
+    useCluster: false
 redis:
     name: ""
     addr: redis:6379

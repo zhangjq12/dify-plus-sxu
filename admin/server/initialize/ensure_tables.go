@@ -65,6 +65,8 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		gaia.AccountDingTalkExtend{},
 		gaia.AppRequestTestBatch{},
 		gaia.AppRequestTest{},
+		gaia.SystemIntegration{},     // Extend System Integration
+		sysModel.SysUserGlobalCode{}, // Extend Global Code
 		// Extend gaia model
 	}
 	for _, t := range tables {
@@ -109,6 +111,8 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		gaia.AccountDingTalkExtend{},
 		gaia.AppRequestTestBatch{},
 		gaia.AppRequestTest{},
+		gaia.SystemIntegration{},     // Extend System Integration
+		sysModel.SysUserGlobalCode{}, // Extend Global Code
 		// Extend gaia model
 	}
 	yes := true
