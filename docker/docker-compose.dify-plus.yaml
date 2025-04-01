@@ -393,7 +393,7 @@ x-shared-env: &shared-api-worker-env
 services:
   # API service
   api:
-    image: ccr.ccs.tencentyun.com/yfgaia/api:0.0.7
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:0.0.7
 #    build:
 #      context: ../api
 #      dockerfile: ./Dockerfile
@@ -419,7 +419,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: ccr.ccs.tencentyun.com/yfgaia/api:0.0.7
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-api:0.0.7
 #    build:
 #      context: ../api
 #      dockerfile: ./Dockerfile
@@ -444,7 +444,7 @@ services:
 
   # Frontend web application.
   web:
-    image: ccr.ccs.tencentyun.com/yfgaia/web:0.0.7
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-web:0.0.7
 #    build:
 #      context: ../web
 #      dockerfile: ./Dockerfile
@@ -608,7 +608,7 @@ services:
       AUTHORIZATION_ADMINLIST_USERS: ${WEAVIATE_AUTHORIZATION_ADMINLIST_USERS:-hello@dify.ai}
 
   admin-web:
-    image: ccr.ccs.tencentyun.com/yfgaia/admin-web:0.0.7
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-web:0.0.7
 #    build:
 #      context: ../admin/web
 #      dockerfile: ./Dockerfile
@@ -622,7 +622,7 @@ services:
       - default
 
   admin-server:
-    image: ccr.ccs.tencentyun.com/yfgaia/admin-server:0.0.7-arm64
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-server:0.0.7
 #    build:
 #      context: ../admin/server
 #      dockerfile: ./Dockerfile

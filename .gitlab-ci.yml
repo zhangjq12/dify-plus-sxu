@@ -7,10 +7,10 @@ stages:
 
 variables:
   DOCKER_REGISTRY: ccr.ccs.tencentyun.com
-  DIFY_WEB_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/web
-  DIFY_API_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/api
-  ADMIN_WEB_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/admin-web
-  ADMIN_SERVER_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/admin-server
+  DIFY_WEB_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/dify-plus-web
+  DIFY_API_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/dify-plus-api
+  ADMIN_WEB_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/dify-plus-admin-web
+  ADMIN_SERVER_IMAGE_NAME: ${DOCKER_REGISTRY}/yfgaia/dify-plus-admin-server
 
 # 只有在打tag时触发
 workflow:
