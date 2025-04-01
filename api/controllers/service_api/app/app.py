@@ -5,7 +5,7 @@ from controllers.common import helpers as controller_helpers
 from controllers.service_api import api
 from controllers.service_api.app.error import AppUnavailableError
 from controllers.service_api.wraps import validate_app_token
-from models.model import App, AppMode
+from models.model import ApiToken, App, AppMode  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
 from services.app_service import AppService
 
 
@@ -14,7 +14,7 @@ class AppParameterApi(Resource):
 
     @validate_app_token
     @marshal_with(fields.parameters_fields)
-    def get(self, app_model: App):
+    def get(self, app_model: App, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         """Retrieve app parameters."""
         if app_model.mode in {AppMode.ADVANCED_CHAT.value, AppMode.WORKFLOW.value}:
             workflow = app_model.workflow

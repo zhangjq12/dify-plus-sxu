@@ -49,7 +49,7 @@ workflow_run_fields = {
 class WorkflowRunDetailApi(Resource):
     @validate_app_token
     @marshal_with(workflow_run_fields)
-    def get(self, app_model: App, workflow_id: str):
+    def get(self, app_model: App, workflow_id: str, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         """
         Get a workflow task running detail
         """
@@ -106,7 +106,7 @@ class WorkflowRunApi(Resource):
 
 class WorkflowTaskStopApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.JSON, required=True))
-    def post(self, app_model: App, end_user: EndUser, task_id: str):
+    def post(self, app_model: App, end_user: EndUser, task_id: str, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         """
         Stop workflow task
         """
@@ -122,7 +122,7 @@ class WorkflowTaskStopApi(Resource):
 class WorkflowAppLogApi(Resource):
     @validate_app_token
     @marshal_with(workflow_app_log_pagination_fields)
-    def get(self, app_model: App):
+    def get(self, app_model: App, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         """
         Get workflow app logs
         """

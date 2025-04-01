@@ -99,7 +99,7 @@ class MessageListApi(Resource):
 
 class MessageFeedbackApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.JSON, required=True))
-    def post(self, app_model: App, end_user: EndUser, message_id):
+    def post(self, app_model: App, end_user: EndUser, message_id, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         message_id = str(message_id)
 
         parser = reqparse.RequestParser()
@@ -123,7 +123,7 @@ class MessageFeedbackApi(Resource):
 
 class MessageSuggestedApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.QUERY, required=True))
-    def get(self, app_model: App, end_user: EndUser, message_id):
+    def get(self, app_model: App, end_user: EndUser, message_id, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         message_id = str(message_id)
         app_mode = AppMode.value_of(app_model.mode)
         if app_mode not in {AppMode.CHAT, AppMode.AGENT_CHAT, AppMode.ADVANCED_CHAT}:

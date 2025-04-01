@@ -15,14 +15,14 @@ from fields.conversation_fields import (
     simple_conversation_fields,
 )
 from libs.helper import uuid_value
-from models.model import App, AppMode, EndUser
+from models.model import ApiToken, App, AppMode, EndUser  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
 from services.conversation_service import ConversationService
 
 
 class ConversationApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.QUERY))
     @marshal_with(conversation_infinite_scroll_pagination_fields)
-    def get(self, app_model: App, end_user: EndUser):
+    def get(self, app_model: App, end_user: EndUser, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         app_mode = AppMode.value_of(app_model.mode)
         if app_mode not in {AppMode.CHAT, AppMode.AGENT_CHAT, AppMode.ADVANCED_CHAT}:
             raise NotChatAppError()
@@ -58,7 +58,7 @@ class ConversationApi(Resource):
 class ConversationDetailApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.JSON))
     @marshal_with(conversation_delete_fields)
-    def delete(self, app_model: App, end_user: EndUser, c_id):
+    def delete(self, app_model: App, end_user: EndUser, c_id, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         app_mode = AppMode.value_of(app_model.mode)
         if app_mode not in {AppMode.CHAT, AppMode.AGENT_CHAT, AppMode.ADVANCED_CHAT}:
             raise NotChatAppError()
@@ -75,7 +75,7 @@ class ConversationDetailApi(Resource):
 class ConversationRenameApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.JSON))
     @marshal_with(simple_conversation_fields)
-    def post(self, app_model: App, end_user: EndUser, c_id):
+    def post(self, app_model: App, end_user: EndUser, c_id, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         app_mode = AppMode.value_of(app_model.mode)
         if app_mode not in {AppMode.CHAT, AppMode.AGENT_CHAT, AppMode.ADVANCED_CHAT}:
             raise NotChatAppError()

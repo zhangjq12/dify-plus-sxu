@@ -20,7 +20,7 @@ from controllers.service_api.app.error import (
 from controllers.service_api.wraps import FetchUserArg, WhereisUserArg, validate_app_token
 from core.errors.error import ModelCurrentlyNotSupportError, ProviderTokenNotInitError, QuotaExceededError
 from core.model_runtime.errors.invoke import InvokeError
-from models.model import App, AppMode, EndUser
+from models.model import ApiToken, App, AppMode, EndUser  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
 from services.audio_service import AudioService
 from services.errors.audio import (
     AudioTooLargeServiceError,
@@ -32,7 +32,7 @@ from services.errors.audio import (
 
 class AudioApi(Resource):
     @validate_app_token(fetch_user_arg=FetchUserArg(fetch_from=WhereisUserArg.FORM))
-    def post(self, app_model: App, end_user: EndUser):
+    def post(self, app_model: App, end_user: EndUser, api_token: ApiToken):  # 二开部分End - 密钥额度限制，新增api_token,否则上传文件会报错
         file = request.files["file"]
 
         try:
