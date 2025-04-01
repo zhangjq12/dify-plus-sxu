@@ -525,7 +525,7 @@ services:
 
   # The Dify-plus SandboxFull
   sandbox-full:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-sandbox-full:0.0.7-arm64
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-sandbox-full:0.0.7
     restart: always
     environment:
       # The DifySandbox configurations
