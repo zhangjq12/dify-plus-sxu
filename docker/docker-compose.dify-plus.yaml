@@ -406,6 +406,7 @@ services:
       SENTRY_DSN: ${API_SENTRY_DSN:-}
       SENTRY_TRACES_SAMPLE_RATE: ${API_SENTRY_TRACES_SAMPLE_RATE:-1.0}
       SENTRY_PROFILES_SAMPLE_RATE: ${API_SENTRY_PROFILES_SAMPLE_RATE:-1.0}
+      FULL_CODE_EXECUTION_ENDPOINT: ${FULL_CODE_EXECUTION_ENDPOINT:-http://sandbox-full:8194}
     depends_on:
       - db
       - redis
@@ -503,6 +504,28 @@ services:
   # The DifySandbox
   sandbox:
     image: langgenius/dify-sandbox:0.2.10
+    restart: always
+    environment:
+      # The DifySandbox configurations
+      # Make sure you are changing this key for your deployment with a strong key.
+      # You can generate a strong key using `openssl rand -base64 42`.
+      API_KEY: ${SANDBOX_API_KEY:-dify-sandbox}
+      GIN_MODE: ${SANDBOX_GIN_MODE:-release}
+      WORKER_TIMEOUT: ${SANDBOX_WORKER_TIMEOUT:-15}
+      ENABLE_NETWORK: ${SANDBOX_ENABLE_NETWORK:-true}
+      HTTP_PROXY: ${SANDBOX_HTTP_PROXY:-http://ssrf_proxy:3128}
+      HTTPS_PROXY: ${SANDBOX_HTTPS_PROXY:-http://ssrf_proxy:3128}
+      SANDBOX_PORT: ${SANDBOX_PORT:-8194}
+    volumes:
+      - ./volumes/sandbox/dependencies:/dependencies
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:8194/health']
+    networks:
+      - ssrf_proxy_network
+
+  # The Dify-plus SandboxFull
+  sandbox-full:
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-sandbox-full:0.0.7-arm64
     restart: always
     environment:
       # The DifySandbox configurations
