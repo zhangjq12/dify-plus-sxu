@@ -578,7 +578,7 @@ services:
 
   # The Dify-plus SandboxFull
   sandbox-full:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-sandbox-full:1.0.0-arm64
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-sandbox-full:0.0.7
     restart: always
     environment:
       # The DifySandbox configurations
@@ -712,7 +712,7 @@ services:
       AUTHORIZATION_ADMINLIST_USERS: ${WEAVIATE_AUTHORIZATION_ADMINLIST_USERS:-hello@dify.ai}
 
   admin-web:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-web:1.0.0
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-web:0.0.7
 #    build:
 #      context: ../admin/web
 #      dockerfile: ./Dockerfile
@@ -726,7 +726,7 @@ services:
       - default
 
   admin-server:
-    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-server:1.0.0
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-plus-admin-server:0.0.7
 #    build:
 #      context: ../admin/server
 #      dockerfile: ./Dockerfile
