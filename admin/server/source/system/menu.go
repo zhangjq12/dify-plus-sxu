@@ -87,11 +87,11 @@ func (i *initMenu) InitializeData(ctx context.Context) (next context.Context, er
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "UserList", Name: "UserList", Component: "view/user/index.vue", Sort: 1, Meta: Meta{Title: "用户列表", Icon: "user"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "QuotaList", Name: "QuotaList", Component: "view/quota/index.vue", Sort: 2, Meta: Meta{Title: "额度管理", Icon: "wallet"}},
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "SuperTest", Name: "SuperTest", Component: "view/test/index.vue", Sort: 2, Meta: Meta{Title: "测试管理", Icon: "management"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 36, Path: "AppRequestTestBatch", Name: "AppRequestTestBatch", Component: "view/test/appRequest/index.vue", Sort: 1, Meta: Meta{Title: "测试批次", Icon: "list"}},
-		{MenuLevel: 0, Hidden: true, ParentId: 36, Path: "AppRequestTestList", Name: "AppRequestTestList", Component: "view/test/appRequest/list.vue", Sort: 1, Meta: Meta{Title: "测试列表", Icon: "list"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 35, Path: "AppRequestTestBatch", Name: "AppRequestTestBatch", Component: "view/test/appRequest/index.vue", Sort: 1, Meta: Meta{Title: "测试批次", Icon: "list"}},
+		{MenuLevel: 0, Hidden: true, ParentId: 35, Path: "AppRequestTestList", Name: "AppRequestTestList", Component: "view/test/appRequest/list.vue", Sort: 1, Meta: Meta{Title: "测试列表", Icon: "list"}},
 		// Extend Start: system integration
 		{MenuLevel: 0, Hidden: false, ParentId: 0, Path: "SystemIntegrated", Name: "SystemIntegrated", Component: "view/systemIntegrated/index.vue", Sort: 1, Meta: Meta{Title: "系统集成", Icon: "box"}},
-		{MenuLevel: 0, Hidden: false, ParentId: 39, Path: "IntegratedDingTalk", Name: "IntegratedDingTalk", Component: "view/systemIntegrated/dingTalk/index.vue", Sort: 1, Meta: Meta{Title: "钉钉", Icon: "turn-off"}},
+		{MenuLevel: 0, Hidden: false, ParentId: 38, Path: "IntegratedDingTalk", Name: "IntegratedDingTalk", Component: "view/systemIntegrated/dingTalk/index.vue", Sort: 1, Meta: Meta{Title: "钉钉", Icon: "turn-off"}},
 		// Extend Stop: system integration
 
 		// 二开部分
