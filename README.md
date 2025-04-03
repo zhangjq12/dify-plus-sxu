@@ -36,6 +36,8 @@ Dify-Plus，该名字不是说比 Dify 项目牛的意思，意思是想说比 D
      3.  调整：非管理员，隐藏密钥显示 
      4. 优化： csv 编码监测，修复批量请求，windows 下载后保存再上传问题
      5. 优化： markdown 图片放大问题优化
+12.  [新增钉钉登录](https://github.com/YFGaia/dify-plus/wiki/Ding%E2%80%90Talk-%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
+13.  [新增sandbox-full，以放开代码执行节点函数限制](https://github.com/YFGaia/dify-plus/wiki/Sandbox%E2%80%90full%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3)
 ## 二. 管理中心
 > 代码所在目录：/admin
 1.  JWT 与 Dify 打通
@@ -84,6 +86,11 @@ Dify-Plus，该名字不是说比 Dify 项目牛的意思，意思是想说比 D
 1. 每月密钥额度花费
 
    ![每月密钥额度花费.jpg](images/dify-plus/每月密钥额度花费.jpg)
+
+1. 钉钉登录配置
+
+   ![image](https://github.com/user-attachments/assets/c87b315b-89aa-4bed-882f-c3243c4d9440)
+
 
 
 ## 版本更新说明
