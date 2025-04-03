@@ -26,11 +26,11 @@ oa-login:
 pgsql:
   prefix: ""
   port: "5432"
-  config: sslmode=disable TimeZone=Asia/Shanghai
-  db-name: dify_plus
-  username: postgres
-  password: difyai123456
-  path: 127.0.0.1
+  config:
+  db-name:
+  username:
+  password:
+  path:
   engine: ""
   log-mode: error
   max-idle-conns: 10
@@ -43,10 +43,12 @@ redis:
   password: difyai123456
   db: 8
   useCluster: false
-  clusterAddrs:
-    - 172.21.0.3:7000
-    - 172.21.0.4:7001
-    - 172.21.0.2:7002
+dify-redis:
+  name: ""
+  addr: 127.0.0.1:6379
+  password: difyai123456
+  db: 0
+  useCluster: false
 system:
   db-type: pgsql
   oss-type: local
