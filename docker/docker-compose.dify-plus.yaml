@@ -462,7 +462,7 @@ services:
 
   # The postgres database.
   db:
-    image: postgres:15-alpine
+    image: ccr.ccs.tencentyun.com/yfgaia/postgres:15-alpine
     restart: always
     environment:
       PGUSER: ${PGUSER:-postgres}
@@ -487,7 +487,7 @@ services:
 
   # The redis cache.
   redis:
-    image: redis:6-alpine
+    image: ccr.ccs.tencentyun.com/yfgaia/redis:6-alpine
     restart: always
     environment:
       REDISCLI_AUTH: ${REDIS_PASSWORD:-difyai123456}
@@ -503,7 +503,7 @@ services:
 
   # The DifySandbox
   sandbox:
-    image: langgenius/dify-sandbox:0.2.10
+    image: ccr.ccs.tencentyun.com/yfgaia/dify-sandbox:0.2.10
     restart: always
     environment:
       # The DifySandbox configurations
@@ -549,7 +549,7 @@ services:
   # for more information, please refer to
   # https://docs.dify.ai/learn-more/faq/install-faq#id-18.-why-is-ssrf_proxy-needed
   ssrf_proxy:
-    image: ubuntu/squid:latest
+    image: ccr.ccs.tencentyun.com/yfgaia/ubuntu-squid:latest
     restart: always
     volumes:
       - ./ssrf_proxy/squid.conf.template:/etc/squid/squid.conf.template
@@ -569,7 +569,7 @@ services:
   # The nginx reverse proxy.
   # used for reverse proxying the API service and Web service.
   nginx:
-    image: nginx:latest
+    image: ccr.ccs.tencentyun.com/yfgaia/nginx:latest
     restart: always
     volumes:
       - ./nginx/nginx.conf.template:/etc/nginx/nginx.conf.template
@@ -608,7 +608,7 @@ services:
 
   # The Weaviate vector store.
   weaviate:
-    image: semitechnologies/weaviate:1.19.0
+    image: ccr.ccs.tencentyun.com/yfgaia/semitechnologies-weaviate:1.19.0
     profiles:
       - ''
       - weaviate
