@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import style from '../page.module.css'
 import Button from '@/app/components/base/button'
 import classNames from '@/utils/classnames'
+import { apiPrefix } from '@/config'
 
 type SocialAuthProps = {
   clientId: string
@@ -20,7 +21,7 @@ export default function DingTalkAuth(props: SocialAuthProps) {
     params.append('prompt', 'consent')
     params.append('response_type', 'code')
     params.append('client_id', props.clientId)
-    params.append('redirect_uri', `${process.env.NEXT_PUBLIC_API_PREFIX}/ding-talk/third-party/login`)
+    params.append('redirect_uri', `${apiPrefix}/ding-talk/third-party/login`)
     router.replace(`https://login.dingtalk.com/oauth2/auth?${params.toString()}`)
   }
 
