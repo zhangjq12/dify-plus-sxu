@@ -122,11 +122,9 @@ class SignUpAndLoginApi(Resource):
                 # TenantService.create_owner_tenant_if_not_exist(account=account, name="SXU's workspace", is_setup=True)
                 super_admin_id = TenantExtendService.get_super_admin_id().id
                 super_admin_tenant_id = TenantExtendService.get_super_admin_tenant_id().id
-                print(super_admin_id)
-                print(super_admin_tenant_id)
                 if super_admin_id and super_admin_tenant_id:
                     isCreate = TenantExtendService.create_default_tenant_member_if_not_exist(
-                        super_admin_tenant_id, account.id
+                        super_admin_tenant_id, account.id, role='editor'
                     )  # 创建默认空间和用户的关系
                     if isCreate:
                         TenantService.switch_tenant(account, super_admin_tenant_id)
