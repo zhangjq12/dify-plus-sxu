@@ -4,7 +4,10 @@ import { SWRConfig } from 'swr'
 import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { fetchSetupStatus } from '@/service/common'
+import { fetchSetupStatus, login } from '@/service/common'
+import { setIsIframe } from '@/utils/globalIsIframe'
+import { useContext } from 'use-context-selector'
+import I18NContext from '@/context/i18n'
 
 type SwrInitorProps = {
   children: ReactNode
@@ -28,6 +31,7 @@ const SwrInitor = ({
   const refreshTokenFromLocalStorage = localStorage?.getItem('refresh_token')
   const pathname = usePathname()
   const [init, setInit] = useState(false)
+  const { locale } = useContext(I18NContext)
 
   const isSetupFinished = useCallback(async () => {
     try {
@@ -44,6 +48,42 @@ const SwrInitor = ({
     catch (error) {
       console.error(error)
       return false
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleIframeLogin = (e: any) => {
+      const data = e.data
+      const email = data.email
+      const password = data.password
+      const loginData: Record<string, any> = {
+        email,
+        password,
+        language: locale,
+        remember_me: true,
+      }
+
+      setIsIframe(true)
+
+      const process = async () => {
+        const res = await login({
+          url: '/signuplogin',
+          body: loginData,
+        })
+        if (res.result === 'success') {
+          localStorage.setItem('console_token', res.data.access_token)
+          localStorage.setItem('refresh_token', res.data.refresh_token)
+          router.replace('/apps')
+        }
+      }
+
+      process()
+    }
+
+    window.addEventListener('message', handleIframeLogin)
+
+    return () => {
+      window.removeEventListener('message', handleIframeLogin)
     }
   }, [])
 

@@ -143,10 +143,13 @@ class AccountService:
         return token
 
     @staticmethod
-    def authenticate(email: str, password: str, invite_token: Optional[str] = None) -> Account:
+    def authenticate(email: str, password: str, invite_token: Optional[str] = None, isSignup: Optional[bool] = False) -> Account | None:
         """authenticate account with email and password"""
 
         account = db.session.query(Account).filter_by(email=email).first()
+        if (not account) and isSignup:
+            return None
+        
         if not account:
             raise AccountNotFoundError()
 
