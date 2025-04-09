@@ -109,7 +109,7 @@ export default function AppSelector({ isMobile }: IAppSelector) {
                     </div>
                   </MenuItem>
                   <div className="px-1 py-1">
-                    {!getIsIframe() && <MenuItem>
+                    {isCurrentWorkspaceOwner && <MenuItem>
                       <Link
                         className={classNames(itemClassName, 'group',
                           'data-[active]:bg-state-base-hover',
