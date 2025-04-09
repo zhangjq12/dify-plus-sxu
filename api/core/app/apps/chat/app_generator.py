@@ -25,6 +25,7 @@ from factories import file_factory
 from models.account import Account
 from models.api_token_money_extend import ApiTokenMessageJoinsExtend  # 二开部分End - 密钥额度限制
 from models.model import App, EndUser
+from services.conversation_service import ConversationService
 from services.errors.message import MessageNotExistsError
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ class ChatAppGenerator(MessageBasedAppGenerator):
         args: Mapping[str, Any],
         invoke_from: InvokeFrom,
         streaming: Literal[True],
-    ) -> Generator[str, None, None]: ...
+    ) -> Generator[Mapping | str, None, None]: ...
 
     @overload
     def generate(
@@ -59,7 +60,7 @@ class ChatAppGenerator(MessageBasedAppGenerator):
         args: Mapping[str, Any],
         invoke_from: InvokeFrom,
         streaming: bool,
-    ) -> Union[Mapping[str, Any], Generator[str, None, None]]: ...
+    ) -> Union[Mapping[str, Any], Generator[Mapping[str, Any] | str, None, None]]: ...
 
     def generate(
         self,
@@ -68,7 +69,7 @@ class ChatAppGenerator(MessageBasedAppGenerator):
         args: Mapping[str, Any],
         invoke_from: InvokeFrom,
         streaming: bool = True,
-    ):
+    ) -> Union[Mapping[str, Any], Generator[Mapping[str, Any] | str, None, None]]:
         """
         Generate App response.
 
@@ -92,9 +93,11 @@ class ChatAppGenerator(MessageBasedAppGenerator):
 
         # get conversation
         conversation = None
-        if args.get("conversation_id"):
-            conversation = self._get_conversation_by_user(app_model, args.get("conversation_id", ""), user)
-
+        conversation_id = args.get("conversation_id")
+        if conversation_id:
+            conversation = ConversationService.get_conversation(
+                app_model=app_model, conversation_id=conversation_id, user=user
+            )
         # get app model config
         app_model_config = self._get_app_model_config(app_model=app_model, conversation=conversation)
 
@@ -142,9 +145,7 @@ class ChatAppGenerator(MessageBasedAppGenerator):
             model_conf=ModelConfigConverter.convert(app_config),
             file_upload_config=file_extra_config,
             conversation_id=conversation.id if conversation else None,
-            inputs=conversation.inputs
-            if conversation
-            else self._prepare_user_inputs(
+            inputs=self._prepare_user_inputs(
                 user_inputs=inputs, variables=app_config.variables, tenant_id=app_model.tenant_id
             ),
             query=query,

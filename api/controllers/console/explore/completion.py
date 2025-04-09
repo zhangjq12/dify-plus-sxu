@@ -16,6 +16,7 @@ from controllers.console.app.error import (
 )
 from controllers.console.explore.error import NotChatAppError, NotCompletionAppError
 from controllers.console.explore.wraps import InstalledAppResource
+from controllers.web.error import InvokeRateLimitError as InvokeRateLimitHttpError
 from controllers.console.money_extend import money_limit
 from core.app.apps.base_app_queue_manager import AppQueueManager
 from core.app.entities.app_invoke_entities import InvokeFrom
@@ -30,6 +31,7 @@ from libs import helper
 from libs.helper import uuid_value
 from models.model import AppMode
 from services.app_generate_service import AppGenerateService
+from services.errors.llm import InvokeRateLimitError
 from services.app_generate_service_extend import (
     AppGenerateServiceExtend,  # Extend: App Center - Recommended list sorted by usage frequency
 )
@@ -85,7 +87,7 @@ class CompletionApi(InstalledAppResource):
             raise CompletionRequestError(e.description)
         except ValueError as e:
             raise e
-        except Exception as e:
+        except Exception:
             logging.exception("internal server error.")
             raise InternalServerError()
 
@@ -149,9 +151,11 @@ class ChatApi(InstalledAppResource):
             raise ProviderModelCurrentlyNotSupportError()
         except InvokeError as e:
             raise CompletionRequestError(e.description)
+        except InvokeRateLimitError as ex:
+            raise InvokeRateLimitHttpError(ex.description)
         except ValueError as e:
             raise e
-        except Exception as e:
+        except Exception:
             logging.exception("internal server error.")
             raise InternalServerError()
 

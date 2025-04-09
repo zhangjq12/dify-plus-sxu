@@ -43,6 +43,7 @@ class FeatureModel(BaseModel):
     members: LimitationModel = LimitationModel(size=0, limit=1)
     apps: LimitationModel = LimitationModel(size=0, limit=10)
     vector_space: LimitationModel = LimitationModel(size=0, limit=5)
+    knowledge_rate_limit: int = 10
     annotation_quota_limit: LimitationModel = LimitationModel(size=0, limit=10)
     documents_upload_quota: LimitationModel = LimitationModel(size=0, limit=50)
     docs_processing: str = "standard"
@@ -54,12 +55,20 @@ class FeatureModel(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
 
 
+class KnowledgeRateLimitModel(BaseModel):
+    enabled: bool = False
+    limit: int = 10
+    subscription_plan: str = ""
+
+
 class SystemFeatureModel(BaseModel):
     sso_enforced_for_signin: bool = False
     sso_enforced_for_signin_protocol: str = ""
     sso_enforced_for_web: bool = False
     sso_enforced_for_web_protocol: str = ""
     enable_web_sso_switch_component: bool = False
+    enable_marketplace: bool = False
+    max_plugin_package_size: int = dify_config.PLUGIN_MAX_PACKAGE_SIZE
     enable_email_code_login: bool = False
     enable_email_password_login: bool = True
     enable_social_oauth_login: bool = False
@@ -86,6 +95,16 @@ class FeatureService:
         return features
 
     @classmethod
+    def get_knowledge_rate_limit(cls, tenant_id: str):
+        knowledge_rate_limit = KnowledgeRateLimitModel()
+        if dify_config.BILLING_ENABLED and tenant_id:
+            knowledge_rate_limit.enabled = True
+            limit_info = BillingService.get_knowledge_rate_limit(tenant_id)
+            knowledge_rate_limit.limit = limit_info.get("limit", 10)
+            knowledge_rate_limit.subscription_plan = limit_info.get("subscription_plan", "sandbox")
+        return knowledge_rate_limit
+
+    @classmethod
     def get_system_features(cls) -> SystemFeatureModel:
         system_features = SystemFeatureModel()
 
@@ -95,6 +114,9 @@ class FeatureService:
             system_features.enable_web_sso_switch_component = True
 
             cls._fulfill_params_from_enterprise(system_features)
+
+        if dify_config.MARKETPLACE_ENABLED:
+            system_features.enable_marketplace = True
 
         return system_features
 
@@ -159,6 +181,9 @@ class FeatureService:
 
         if "model_load_balancing_enabled" in billing_info:
             features.model_load_balancing_enabled = billing_info["model_load_balancing_enabled"]
+
+        if "knowledge_rate_limit" in billing_info:
+            features.knowledge_rate_limit = billing_info["knowledge_rate_limit"]["limit"]
 
     @classmethod
     def _fulfill_params_from_enterprise(cls, features):
