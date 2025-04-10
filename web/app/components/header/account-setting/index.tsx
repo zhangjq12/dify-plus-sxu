@@ -56,7 +56,7 @@ export default function AccountSetting({
   const [activeMenu, setActiveMenu] = useState(activeTab)
   const { t } = useTranslation()
   const { enableBilling, enableReplaceWebAppLogo } = useProviderContext()
-  const { isCurrentWorkspaceDatasetOperator } = useAppContext()
+  const { isCurrentWorkspaceDatasetOperator, isCurrentWorkspaceOwner } = useAppContext()
 
   const workplaceGroupItems = (() => {
     if (isCurrentWorkspaceDatasetOperator)
@@ -69,7 +69,7 @@ export default function AccountSetting({
         activeIcon: <RiBrain2Fill className={iconClassName} />,
       },
       {
-        key: 'members',
+        key: isCurrentWorkspaceOwner ? 'members': false,
         name: t('common.settings.members'),
         icon: <RiGroup2Line className={iconClassName} />,
         activeIcon: <RiGroup2Fill className={iconClassName} />,
