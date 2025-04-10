@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import {
   RiArrowDownSLine,
-  RiPlanetLine,
   RiPlayCircleLine,
   RiPlayList2Line,
   RiTerminalBoxLine,
@@ -252,7 +251,7 @@ const AppPublisher = ({
                     {t('workflow.common.embedIntoSite')}
                   </SuggestedAction>
                 )}
-              <SuggestedAction
+              {/* <SuggestedAction
                 onClick={() => {
                   publishedAt && handleOpenInExplore()
                 }}
@@ -260,7 +259,7 @@ const AppPublisher = ({
                 icon={<RiPlanetLine className='h-4 w-4' />}
               >
                 {t('workflow.common.openInExplore')}
-              </SuggestedAction>
+              </SuggestedAction> */}
               <SuggestedAction
                 disabled={!publishedAt}
                 link='./develop'

@@ -61,7 +61,8 @@ const Header = () => {
         {
           !isMobile
           && <div className='flex w-64 shrink-0 items-center gap-1.5 self-stretch p-2 pl-3'>
-            <Link href="/explore/apps-center-extend" className='flex h-8 w-8 shrink-0 items-center justify-center gap-2'>
+            {/* <Link href="/explore/apps-center-extend" className='flex h-8 w-8 shrink-0 items-center justify-center gap-2'> */}
+            <Link href="/apps" className='flex h-8 w-8 shrink-0 items-center justify-center gap-2'>
               <LogoSite className='object-contain' />
             </Link>
             <div className='font-light text-divider-deep'>/</div>
@@ -77,7 +78,8 @@ const Header = () => {
       </div >
       {isMobile && (
         <div className='flex'>
-          <Link href="/explore/apps-center-extend" className='mr-4 flex items-center'>
+          <Link href="/apps" className='mr-4 flex items-center'>
+            {/* <Link href="/explore/apps-center-extend" className='mr-4 flex items-center'></Link> */}
             <LogoSite />
           </Link>
           <div className='font-light text-divider-deep'>/</div>

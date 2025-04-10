@@ -81,7 +81,8 @@ export default function MailAndPasswordAuth({ isInvite, isEmailSetup, allowRegis
             router.replace(redirectUrl as string)
             return
           }
-          router.replace('/explore/apps-center-extend')
+          // router.replace('/explore/apps-center-extend')
+          router.replace('/apps')
           // Extend End  ----------------
         }
       }

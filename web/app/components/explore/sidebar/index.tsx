@@ -30,7 +30,7 @@ const DiscoveryIcon = () => (
 // ----------------------- 二开部分Begin 新增应用中心-----------------------
 const SelectedAppCenterIcon = () => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-    className="remixicon w-4 h-4">
+    className="remixicon h-4 w-4">
     <path
       d="M13.5 2C13.5 2.44425 13.3069 2.84339 13 3.11805V5H18C19.6569 5 21 6.34315 21 8V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V8C3 6.34315 4.34315 5 6 5H11V3.11805C10.6931 2.84339 10.5 2.44425 10.5 2C10.5 1.17157 11.1716 0.5 12 0.5C12.8284 0.5 13.5 1.17157 13.5 2ZM0 10H2V16H0V10ZM24 10H22V16H24V10ZM9 14.5C9.82843 14.5 10.5 13.8284 10.5 13C10.5 12.1716 9.82843 11.5 9 11.5C8.17157 11.5 7.5 12.1716 7.5 13C7.5 13.8284 8.17157 14.5 9 14.5ZM16.5 13C16.5 12.1716 15.8284 11.5 15 11.5C14.1716 11.5 13.5 12.1716 13.5 13C13.5 13.8284 14.1716 14.5 15 14.5C15.8284 14.5 16.5 13.8284 16.5 13Z"></path>
   </svg>
@@ -38,7 +38,7 @@ const SelectedAppCenterIcon = () => (
 
 const AppCenterIcon = () => (
   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
-    className="remixicon w-4 h-4">
+    className="remixicon h-4 w-4">
     <path
       d="M13.5 2C13.5 2.44425 13.3069 2.84339 13 3.11805V5H18C19.6569 5 21 6.34315 21 8V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V8C3 6.34315 4.34315 5 6 5H11V3.11805C10.6931 2.84339 10.5 2.44425 10.5 2C10.5 1.17157 11.1716 0.5 12 0.5C12.8284 0.5 13.5 1.17157 13.5 2ZM6 7C5.44772 7 5 7.44772 5 8V18C5 18.5523 5.44772 19 6 19H18C18.5523 19 19 18.5523 19 18V8C19 7.44772 18.5523 7 18 7H13H11H6ZM2 10H0V16H2V10ZM22 10H24V16H22V10ZM9 14.5C9.82843 14.5 10.5 13.8284 10.5 13C10.5 12.1716 9.82843 11.5 9 11.5C8.17157 11.5 7.5 12.1716 7.5 13C7.5 13.8284 8.17157 14.5 9 14.5ZM15 14.5C15.8284 14.5 16.5 13.8284 16.5 13C16.5 12.1716 15.8284 11.5 15 11.5C14.1716 11.5 13.5 12.1716 13.5 13C13.5 13.8284 14.1716 14.5 15 14.5Z"></path>
   </svg>
@@ -127,16 +127,16 @@ const SideBar: FC<IExploreSideBarProps> = ({
         </Link>
       </div>
       )}
-      <div className='mt-2'>
+      {(currentWorkspace.role === 'owner') && <div className='mt-2'>
         <Link
           href='/explore/apps-center-extend'
-          className={cn(isAppCenterSelected ? 'text-primary-600  bg-white font-semibold' : 'text-gray-700 font-medium hover:bg-gray-200', 'flex items-center pc:justify-start pc:w-full mobile:justify-center mobile:w-fit h-9 px-3 mobile:px-2 gap-2 rounded-lg')}
+          className={cn(isAppCenterSelected ? 'bg-white  font-semibold text-primary-600' : 'font-medium text-gray-700 hover:bg-gray-200', 'flex h-9 items-center gap-2 rounded-lg px-3 mobile:w-fit mobile:justify-center mobile:px-2 pc:w-full pc:justify-start')}
           style={isAppCenterSelected ? { boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)' } : {}}
         >
           {isAppCenterSelected ? <SelectedAppCenterIcon /> : <AppCenterIcon />}
           {!isMobile && <div className='text-sm'>{t('extend.sidebar.appCenter')}</div>}
         </Link>
-      </div>
+      </div>}
       {/* ----------------------- 二开部分End 新增应用中心 ----------------------- */}
       {installedApps.length > 0 && (
         <div className='mt-10'>

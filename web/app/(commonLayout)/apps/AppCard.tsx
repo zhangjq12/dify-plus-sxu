@@ -306,19 +306,19 @@ const AppCard = ({ app, onRefresh, onApp }: AppCardProps) => {
             </div>
           </>
         )}
-        <Divider className="!my-1" />
+        {/* <Divider className="!my-1" />
         <button className='mx-1 flex h-8 w-[calc(100%_-_8px)] cursor-pointer items-center gap-2 rounded-lg px-3 py-[6px] hover:bg-state-base-hover' onClick={onClickInstalledApp}>
           <span className='system-sm-regular text-text-secondary'>{t('app.openInExplore')}</span>
-        </button>
+        </button> */}
         {/* <>------start SyncToAppTemplate-------</> */}
         {(userProfile.admin_extend && userProfile.tenant_extend && !onApp) && (
           <>
             <Divider className="!my-1"/>
             <div
-              className='h-9 py-2 px-3 mx-1 flex items-center hover:bg-gray-50 rounded-lg cursor-pointer'
+              className='mx-1 flex h-9 cursor-pointer items-center rounded-lg px-3 py-2 hover:bg-gray-50'
               onClick={onClickSyncToAppTemplate}
             >
-              <span style={{ color: '#00931e' }} className='text-gray-700 text-sm leading-5'>{t('extend.app.syncToAppTemplate')}</span>
+              <span style={{ color: '#00931e' }} className='text-sm leading-5 text-gray-700'>{t('extend.app.syncToAppTemplate')}</span>
             </div>
           </>
         )}
@@ -326,10 +326,10 @@ const AppCard = ({ app, onRefresh, onApp }: AppCardProps) => {
           <>
             <Divider className="!my-1"/>
             <div
-              className='h-9 py-2 px-3 mx-1 flex items-center hover:bg-gray-50 rounded-lg cursor-pointer'
+              className='mx-1 flex h-9 cursor-pointer items-center rounded-lg px-3 py-2 hover:bg-gray-50'
               onClick={onClickCancelSyncToAppTemplate}
             >
-              <span style={{ color: '#b70000' }} className='text-gray-700 text-sm leading-5'>{t('extend.app.cancelSyncToAppTemplate')}</span>
+              <span style={{ color: '#b70000' }} className='text-sm leading-5 text-gray-700'>{t('extend.app.cancelSyncToAppTemplate')}</span>
             </div>
           </>
         )}
