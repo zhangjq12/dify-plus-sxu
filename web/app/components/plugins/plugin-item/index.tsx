@@ -102,7 +102,7 @@ const PluginItem: FC<Props> = ({
                   usedInApps={5}
                   isShowFetchNewVersion={source === PluginSource.github}
                   isShowInfo={source === PluginSource.github}
-                  isShowDelete
+                  isShowDelete={false}
                   meta={meta}
                   onDelete={handleDelete}
                   category={category}
