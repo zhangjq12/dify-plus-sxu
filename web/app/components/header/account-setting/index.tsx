@@ -51,7 +51,7 @@ type GroupItem = {
 
 export default function AccountSetting({
   onCancel,
-  activeTab = 'members',
+  activeTab = 'data-source',
 }: IAccountSettingProps) {
   const [activeMenu, setActiveMenu] = useState(activeTab)
   const { t } = useTranslation()
@@ -69,7 +69,7 @@ export default function AccountSetting({
         activeIcon: <RiBrain2Fill className={iconClassName} />,
       },
       {
-        key: isCurrentWorkspaceOwner ? 'members': false,
+        key: isCurrentWorkspaceOwner ? 'members' : false,
         name: t('common.settings.members'),
         icon: <RiGroup2Line className={iconClassName} />,
         activeIcon: <RiGroup2Fill className={iconClassName} />,
