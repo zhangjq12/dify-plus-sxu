@@ -86,7 +86,7 @@ const Marketplace = ({
           <Link
             href={`${MARKETPLACE_URL_PREFIX}?language=${locale}&q=${searchPluginText}&tags=${filterPluginTags.join(',')}`}
             className='system-sm-medium ml-1 flex items-center text-text-accent'
-            target='_blank'
+            // target='_blank'
           >
             {t('plugin.marketplace.difyMarketplace')}
             <RiArrowRightUpLine className='h-4 w-4' />
