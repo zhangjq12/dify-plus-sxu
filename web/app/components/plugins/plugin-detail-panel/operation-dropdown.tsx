@@ -86,13 +86,13 @@ const OperationDropdown: FC<Props> = ({
           {(source === PluginSource.marketplace || source === PluginSource.github) && (
             <div className='my-1 h-px bg-divider-subtle'></div>
           )}
-          <div
+          {/* <div
             onClick={() => {
               onRemove()
               handleTrigger()
             }}
             className='system-md-regular cursor-pointer rounded-lg px-3 py-1.5 text-text-secondary hover:bg-state-destructive-hover hover:text-text-destructive'
-          >{t('plugin.detailPanel.operation.remove')}</div>
+          >{t('plugin.detailPanel.operation.remove')}</div> */}
         </div>
       </PortalToFollowElemContent>
     </PortalToFollowElem>

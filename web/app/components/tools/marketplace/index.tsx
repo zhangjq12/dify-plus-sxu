@@ -12,6 +12,7 @@ import List from '@/app/components/plugins/marketplace/list'
 import Loading from '@/app/components/base/loading'
 import { getLocaleOnClient } from '@/i18n'
 import { MARKETPLACE_URL_PREFIX } from '@/config'
+import Link from 'next/link'
 
 type MarketplaceProps = {
   searchPluginText: string
@@ -82,14 +83,14 @@ const Marketplace = ({
             {t('plugin.category.bundles')}
           </span>
           {t('common.operation.in')}
-          <a
+          <Link
             href={`${MARKETPLACE_URL_PREFIX}?language=${locale}&q=${searchPluginText}&tags=${filterPluginTags.join(',')}`}
             className='system-sm-medium ml-1 flex items-center text-text-accent'
             target='_blank'
           >
             {t('plugin.marketplace.difyMarketplace')}
             <RiArrowRightUpLine className='h-4 w-4' />
-          </a>
+          </Link>
         </div>
       </div>
       {
