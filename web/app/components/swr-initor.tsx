@@ -56,19 +56,21 @@ const SwrInitor = ({
 
   useEffect(() => {
     const handleIframeLogin = (e: any) => {
-      const data = e.data
-      const email = data.email
-      const password = data.password
-      const loginDatas: Record<string, any> = {
-        email,
-        password,
-        language: locale,
-        remember_me: true,
-      }
+      if (e.env === 'developer') {
+        const data = e.data
+        const email = data.email
+        const password = data.password
+        const loginDatas: Record<string, any> = {
+          email,
+          password,
+          language: locale,
+          remember_me: true,
+        }
 
-      setIsIframe(true, false)
-      setIframe(true)
-      setLoginData(loginDatas)
+        setIsIframe(true, false)
+        setIframe(true)
+        setLoginData(loginDatas)
+      }
     }
 
     window.addEventListener('message', handleIframeLogin)
@@ -94,7 +96,6 @@ const SwrInitor = ({
           if (res.result === 'success') {
             localStorage.setItem('console_token', res.data.access_token)
             localStorage.setItem('refresh_token', res.data.refresh_token)
-            router.replace('/apps')
           }
           return
         }
