@@ -21,7 +21,7 @@ import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import { checkOrSetAccessToken } from '@/app/components/share/utils'
 import AppUnavailable from '@/app/components/base/app-unavailable'
 import cn from '@/utils/classnames'
-import { setIsIframe } from '@/utils/globalIsIframe'
+import { getIsIframe } from '@/utils/globalIsIframe'
 import { login } from '@/service/common'
 import { useContext } from 'use-context-selector'
 import I18NContext from '@/context/i18n'
@@ -223,38 +223,6 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   const { locale } = useContext(I18NContext)
 
   useAsyncEffect(async () => {
-    const handleIframeLogin = (e: any) => {
-      const data = e.data
-      const email = data.email
-      const password = data.password
-      const rurl = data.rurl
-      const loginData: Record<string, any> = {
-        email,
-        password,
-        language: locale,
-        remember_me: true,
-      }
-
-      setIsIframe(true)
-
-      const process = async () => {
-        const res = await login({
-          url: '/signuplogin',
-          body: loginData,
-        })
-        if (res.result === 'success') {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
-          const url = localStorage.getItem('redirect_url')
-          router.replace(url || rurl || '/apps')
-        }
-      }
-
-      process()
-    }
-
-    window.onmessage = handleIframeLogin
-
     if (!initialized) {
       if (!installedAppInfo) {
         try {
@@ -281,9 +249,25 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
       const consoleToken = searchParams.get('console_token')
       const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
       if (!(consoleToken || consoleTokenFromLocalStorage)) {
-        localStorage.setItem('redirect_url', window.location.href)
-        router.replace('/signin')
-        setHasToken(false)
+        const loginData = localStorage.getItem('loginData')
+        if (getIsIframe() && loginData) {
+          const loginProcess = async () => {
+            const res = await login({
+              url: '/signuplogin',
+              body: JSON.parse(loginData),
+            })
+            if (res.result === 'success') {
+              localStorage.setItem('console_token', res.data.access_token)
+              localStorage.setItem('refresh_token', res.data.refresh_token)
+            }
+          }
+          loginProcess()
+        }
+        else {
+          localStorage.setItem('redirect_url', window.location.href)
+          router.replace('/signin')
+          setHasToken(false)
+        }
       }
     }
   }, [router, searchParams])
