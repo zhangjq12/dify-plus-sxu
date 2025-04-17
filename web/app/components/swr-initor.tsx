@@ -56,7 +56,7 @@ const SwrInitor = ({
 
   useEffect(() => {
     const handleIframeLogin = (e: any) => {
-      if (e.env === 'developer') {
+      if (e.data.env === 'developer') {
         const data = e.data
         const email = data.email
         const password = data.password
