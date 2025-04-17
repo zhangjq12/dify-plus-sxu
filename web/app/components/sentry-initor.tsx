@@ -37,9 +37,8 @@ const SentryInit = ({
           const redirectUrl = localStorage.getItem('redirect_url')
           localStorage.removeItem('redirect_url')
           window.location.replace(redirectUrl as string)
-          return
         }
-        window.location.replace('/apps')
+        // window.location.replace('/apps')
       }
     }
     loginProcess()
