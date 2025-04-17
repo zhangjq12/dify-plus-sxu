@@ -227,6 +227,7 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
       const data = e.data
       const email = data.email
       const password = data.password
+      const rurl = data.rurl
       const loginData: Record<string, any> = {
         email,
         password,
@@ -245,7 +246,7 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
           localStorage.setItem('console_token', res.data.access_token)
           localStorage.setItem('refresh_token', res.data.refresh_token)
           const url = localStorage.getItem('redirect_url')
-          router.replace(url || '/apps')
+          router.replace(url || rurl || '/apps')
         }
       }
 
