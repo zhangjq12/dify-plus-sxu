@@ -21,10 +21,6 @@ import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import { checkOrSetAccessToken } from '@/app/components/share/utils'
 import AppUnavailable from '@/app/components/base/app-unavailable'
 import cn from '@/utils/classnames'
-import { getIsIframe } from '@/utils/globalIsIframe'
-import { login } from '@/service/common'
-import { useContext } from 'use-context-selector'
-import I18NContext from '@/context/i18n'
 
 type ChatWithHistoryProps = {
   className?: string
@@ -220,27 +216,7 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   const [isUnknownReason, setIsUnknownReason] = useState<boolean>(false)
   const [hasToken, setHasToken] = useState<boolean>(true)
 
-  const { locale } = useContext(I18NContext)
-
   useAsyncEffect(async () => {
-    const loginData = localStorage.getItem('loginData')
-    if (getIsIframe() && loginData) {
-      const loginProcess = async () => {
-        const data = JSON.parse(loginData)
-        data.language = locale
-        const res = await login({
-          url: '/signuplogin',
-          body: data,
-        })
-        if (res.result === 'success') {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
-        }
-      }
-
-      await loginProcess()
-    }
-
     if (!initialized) {
       if (!installedAppInfo) {
         try {
