@@ -223,6 +223,35 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   const { locale } = useContext(I18NContext)
 
   useAsyncEffect(async () => {
+    const handleIframeLogin = (e: any) => {
+      const data = e.data
+      const email = data.email
+      const password = data.password
+      const loginData: Record<string, any> = {
+        email,
+        password,
+        language: locale,
+        remember_me: true,
+      }
+
+      setIsIframe(true)
+
+      const process = async () => {
+        const res = await login({
+          url: '/signuplogin',
+          body: loginData,
+        })
+        if (res.result === 'success') {
+          localStorage.setItem('console_token', res.data.access_token)
+          localStorage.setItem('refresh_token', res.data.refresh_token)
+        }
+      }
+
+      process()
+    }
+
+    window.onmessage = handleIframeLogin
+
     if (!initialized) {
       if (!installedAppInfo) {
         try {
@@ -245,36 +274,6 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   // ------------------------ start You must log in to access your account extend ------------------------
   // fix: window is not defined
   useEffect(() => {
-    const handleIframeLogin = (e: any) => {
-      const data = e.data
-      const email = data.email
-      const password = data.password
-      const loginData: Record<string, any> = {
-        email,
-        password,
-        language: locale,
-        remember_me: true,
-      }
-
-      setIsIframe(true)
-
-      const process = async () => {
-        const res = await login({
-          url: '/signuplogin',
-          body: loginData,
-        })
-        if (res.result === 'success') {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
-          router.replace('/apps')
-        }
-      }
-
-      process()
-    }
-
-    window.onmessage = handleIframeLogin
-
     if (typeof window !== 'undefined') {
       const consoleToken = searchParams.get('console_token')
       const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
