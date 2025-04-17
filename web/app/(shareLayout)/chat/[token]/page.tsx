@@ -5,14 +5,14 @@ import { setIsIframe } from '@/utils/globalIsIframe'
 import { login } from '@/service/common'
 
 const Chat = () => {
-  const handleIframeLogin = (e: any) => {
+  const handleIframeLogin = async (e: any) => {
     const data = e.data
     const email = data.email
     const password = data.password
     const loginData: Record<string, any> = {
       email,
       password,
-      language: 'zh-CN',
+      language: 'zh-Hans',
       remember_me: true,
     }
 
@@ -27,7 +27,7 @@ const Chat = () => {
         localStorage.setItem('refresh_token', res.data.refresh_token)
       }
     }
-    loginProcess()
+    await loginProcess()
   }
 
   useEffect(() => {

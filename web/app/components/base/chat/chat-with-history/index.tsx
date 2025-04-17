@@ -21,6 +21,8 @@ import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import { checkOrSetAccessToken } from '@/app/components/share/utils'
 import AppUnavailable from '@/app/components/base/app-unavailable'
 import cn from '@/utils/classnames'
+import { getIsIframe } from '@/utils/globalIsIframe'
+import { login } from '@/service/common'
 import { useContext } from 'use-context-selector'
 import I18NContext from '@/context/i18n'
 
@@ -247,9 +249,27 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
       const consoleToken = searchParams.get('console_token')
       const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
       if (!(consoleToken || consoleTokenFromLocalStorage)) {
-        localStorage.setItem('redirect_url', window.location.href)
-        router.replace('/signin')
-        setHasToken(false)
+        const loginData = localStorage.getItem('loginData')
+        if (getIsIframe() && loginData) {
+          const loginProcess = async () => {
+            const data = JSON.parse(loginData)
+            data.language = locale
+            const res = await login({
+              url: '/signuplogin',
+              body: data,
+            })
+            if (res.result === 'success') {
+              localStorage.setItem('console_token', res.data.access_token)
+              localStorage.setItem('refresh_token', res.data.refresh_token)
+            }
+          }
+          loginProcess()
+        }
+        else {
+          localStorage.setItem('redirect_url', window.location.href)
+          router.replace('/signin')
+          setHasToken(false)
+        }
       }
     }
   }, [router, searchParams])
