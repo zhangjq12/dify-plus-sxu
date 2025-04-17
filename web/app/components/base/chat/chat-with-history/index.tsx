@@ -244,6 +244,8 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
         if (res.result === 'success') {
           localStorage.setItem('console_token', res.data.access_token)
           localStorage.setItem('refresh_token', res.data.refresh_token)
+          const url = localStorage.getItem('redirect_url')
+          router.replace(url || '/apps')
         }
       }
 
