@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import ChatWithHistoryWrap from '@/app/components/base/chat/chat-with-history'
 import { setIsIframe } from '@/utils/globalIsIframe'
 import { login } from '@/service/common'
@@ -30,7 +30,10 @@ const Chat = () => {
     loginProcess()
   }
 
-  window.onmessage = handleIframeLogin
+  useEffect(() => {
+    if (typeof window !== 'undefined')
+      window.onmessage = handleIframeLogin
+  }, [])
 
   return (
     <ChatWithHistoryWrap />
