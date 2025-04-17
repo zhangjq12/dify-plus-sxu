@@ -222,6 +222,28 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
 
   const { locale } = useContext(I18NContext)
 
+  useAsyncEffect(async () => {
+    if (!initialized) {
+      if (!installedAppInfo) {
+        try {
+          await checkOrSetAccessToken()
+        }
+        catch (e: any) {
+          if (e.status === 404) {
+            setAppUnavailable(true)
+          }
+          else {
+            setIsUnknownReason(true)
+            setAppUnavailable(true)
+          }
+        }
+      }
+      setInitialized(true)
+    }
+  }, [])
+
+  // ------------------------ start You must log in to access your account extend ------------------------
+  // fix: window is not defined
   useEffect(() => {
     const handleIframeLogin = (e: any) => {
       const data = e.data
@@ -251,36 +273,8 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
       process()
     }
 
-    window.addEventListener('message', handleIframeLogin)
+    window.onmessage = handleIframeLogin
 
-    return () => {
-      window.removeEventListener('message', handleIframeLogin)
-    }
-  }, [])
-
-  useAsyncEffect(async () => {
-    if (!initialized) {
-      if (!installedAppInfo) {
-        try {
-          await checkOrSetAccessToken()
-        }
-        catch (e: any) {
-          if (e.status === 404) {
-            setAppUnavailable(true)
-          }
-          else {
-            setIsUnknownReason(true)
-            setAppUnavailable(true)
-          }
-        }
-      }
-      setInitialized(true)
-    }
-  }, [])
-
-  // ------------------------ start You must log in to access your account extend ------------------------
-  // fix: window is not defined
-  useEffect(() => {
     if (typeof window !== 'undefined') {
       const consoleToken = searchParams.get('console_token')
       const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
