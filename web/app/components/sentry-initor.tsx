@@ -3,8 +3,6 @@
 import { useEffect } from 'react'
 import * as Sentry from '@sentry/react'
 import { setIsIframe } from '@/utils/globalIsIframe'
-import { useContext } from 'use-context-selector'
-import { I18nContext } from 'react-i18next'
 import { login } from '@/service/common'
 
 const isDevelopment = process.env.NODE_ENV === 'development'
@@ -12,9 +10,7 @@ const isDevelopment = process.env.NODE_ENV === 'development'
 const SentryInit = ({
   children,
 }: { children: React.ReactNode }) => {
-  const locale = useContext(I18nContext)
-
-  const handleIframeLogin = async (e: any) => {
+  const handleIframeLogin = (e: any) => {
     const data = e.data
     const email = data.email
     const password = data.password
@@ -24,11 +20,12 @@ const SentryInit = ({
       remember_me: true,
     }
 
+    // console.log(data)
     setIsIframe(true)
     // localStorage.setItem('loginData', JSON.stringify(loginData))
     const loginProcess = async () => {
       const data = loginData
-      data.language = locale
+      data.language = 'zh-Hans'
       const res = await login({
         url: '/signuplogin',
         body: data,
@@ -36,15 +33,23 @@ const SentryInit = ({
       if (res.result === 'success') {
         localStorage.setItem('console_token', res.data.access_token)
         localStorage.setItem('refresh_token', res.data.refresh_token)
+        if (localStorage.getItem('redirect_url')) {
+          const redirectUrl = localStorage.getItem('redirect_url')
+          localStorage.removeItem('redirect_url')
+          window.location.replace(redirectUrl as string)
+          return
+        }
+        window.location.replace('/apps')
       }
     }
-
-    await loginProcess()
+    loginProcess()
   }
 
   useEffect(() => {
     window.onmessage = handleIframeLogin
+  }, [])
 
+  useEffect(() => {
     const SENTRY_DSN = document?.body?.getAttribute('data-public-sentry-dsn')
     if (!isDevelopment && SENTRY_DSN) {
       Sentry.init({

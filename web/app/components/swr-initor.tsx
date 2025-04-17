@@ -4,8 +4,7 @@ import { SWRConfig } from 'swr'
 import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { fetchSetupStatus, login } from '@/service/common'
-import { setIsIframe } from '@/utils/globalIsIframe'
+import { fetchSetupStatus } from '@/service/common'
 import { useContext } from 'use-context-selector'
 import I18NContext from '@/context/i18n'
 
@@ -51,41 +50,41 @@ const SwrInitor = ({
     }
   }, [])
 
-  useEffect(() => {
-    const handleIframeLogin = (e: any) => {
-      const data = e.data
-      const email = data.email
-      const password = data.password
-      const loginData: Record<string, any> = {
-        email,
-        password,
-        language: locale,
-        remember_me: true,
-      }
+  // useEffect(() => {
+  //   const handleIframeLogin = (e: any) => {
+  //     const data = e.data
+  //     const email = data.email
+  //     const password = data.password
+  //     const loginData: Record<string, any> = {
+  //       email,
+  //       password,
+  //       language: locale,
+  //       remember_me: true,
+  //     }
 
-      setIsIframe(true)
+  //     setIsIframe(true)
 
-      const process = async () => {
-        const res = await login({
-          url: '/signuplogin',
-          body: loginData,
-        })
-        if (res.result === 'success') {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
-          router.replace('/apps')
-        }
-      }
+  //     const process = async () => {
+  //       const res = await login({
+  //         url: '/signuplogin',
+  //         body: loginData,
+  //       })
+  //       if (res.result === 'success') {
+  //         localStorage.setItem('console_token', res.data.access_token)
+  //         localStorage.setItem('refresh_token', res.data.refresh_token)
+  //         router.replace('/apps')
+  //       }
+  //     }
 
-      process()
-    }
+  //     process()
+  //   }
 
-    window.addEventListener('message', handleIframeLogin)
+  //   window.addEventListener('message', handleIframeLogin)
 
-    return () => {
-      window.removeEventListener('message', handleIframeLogin)
-    }
-  }, [])
+  //   return () => {
+  //     window.removeEventListener('message', handleIframeLogin)
+  //   }
+  // }, [])
 
   useEffect(() => {
     (async () => {
