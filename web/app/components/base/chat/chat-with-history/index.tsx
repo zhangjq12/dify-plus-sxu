@@ -223,6 +223,24 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
   const { locale } = useContext(I18NContext)
 
   useAsyncEffect(async () => {
+    const loginData = localStorage.getItem('loginData')
+    if (getIsIframe() && loginData) {
+      const loginProcess = async () => {
+        const data = JSON.parse(loginData)
+        data.language = locale
+        const res = await login({
+          url: '/signuplogin',
+          body: data,
+        })
+        if (res.result === 'success') {
+          localStorage.setItem('console_token', res.data.access_token)
+          localStorage.setItem('refresh_token', res.data.refresh_token)
+        }
+      }
+
+      await loginProcess()
+    }
+
     if (!initialized) {
       if (!installedAppInfo) {
         try {
@@ -249,27 +267,9 @@ const ChatWithHistoryWrapWithCheckToken: FC<ChatWithHistoryWrapProps> = ({
       const consoleToken = searchParams.get('console_token')
       const consoleTokenFromLocalStorage = localStorage.getItem('console_token')
       if (!(consoleToken || consoleTokenFromLocalStorage)) {
-        const loginData = localStorage.getItem('loginData')
-        if (getIsIframe() && loginData) {
-          const loginProcess = async () => {
-            const data = JSON.parse(loginData)
-            data.language = locale
-            const res = await login({
-              url: '/signuplogin',
-              body: data,
-            })
-            if (res.result === 'success') {
-              localStorage.setItem('console_token', res.data.access_token)
-              localStorage.setItem('refresh_token', res.data.refresh_token)
-            }
-          }
-          loginProcess()
-        }
-        else {
-          localStorage.setItem('redirect_url', window.location.href)
-          router.replace('/signin')
-          setHasToken(false)
-        }
+        localStorage.setItem('redirect_url', window.location.href)
+        router.replace('/signin')
+        setHasToken(false)
       }
     }
   }, [router, searchParams])
