@@ -2,6 +2,7 @@
 import React from 'react'
 import ChatWithHistoryWrap from '@/app/components/base/chat/chat-with-history'
 import { setIsIframe } from '@/utils/globalIsIframe'
+import { login } from '@/service/common'
 
 const Chat = () => {
   const handleIframeLogin = (e: any) => {
@@ -16,7 +17,17 @@ const Chat = () => {
     }
 
     setIsIframe(true)
-    localStorage.setItem('loginData', JSON.stringify(loginData))
+    const loginProcess = async () => {
+      const res = await login({
+        url: '/signuplogin',
+        body: loginData,
+      })
+      if (res.result === 'success') {
+        localStorage.setItem('console_token', res.data.access_token)
+        localStorage.setItem('refresh_token', res.data.refresh_token)
+      }
+    }
+    loginProcess()
   }
 
   window.onmessage = handleIframeLogin
