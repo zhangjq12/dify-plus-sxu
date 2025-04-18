@@ -5,8 +5,6 @@ import { useCallback, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchSetupStatus } from '@/service/common'
-import { useContext } from 'use-context-selector'
-import I18NContext from '@/context/i18n'
 
 type SwrInitorProps = {
   children: ReactNode
@@ -30,7 +28,6 @@ const SwrInitor = ({
   const refreshTokenFromLocalStorage = localStorage?.getItem('refresh_token')
   const pathname = usePathname()
   const [init, setInit] = useState(false)
-  const { locale } = useContext(I18NContext)
 
   const isSetupFinished = useCallback(async () => {
     try {

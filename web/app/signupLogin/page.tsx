@@ -1,11 +1,11 @@
 'use client'
 
-import { login as loginPost } from '@/service/common'
 import { setIsIframe } from '@/utils/globalIsIframe'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const SignUpLogin = () => {
-  const [login, setLogin] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     setIsIframe(true)
@@ -22,7 +22,7 @@ const SignUpLogin = () => {
         }
 
         localStorage.setItem('loginData', JSON.stringify(loginData))
-        setLogin(true)
+        router.replace('/signupLogin/success')
       }
     }
 
@@ -33,25 +33,7 @@ const SignUpLogin = () => {
       if (typeof window !== 'undefined')
         window.removeEventListener('message', handleLoginData, false)
     }
-  }, [])
-
-  useEffect(() => {
-    const process = async () => {
-      const loginData = localStorage.getItem('loginData')
-      if (loginData) {
-        const res = await loginPost({
-          url: '/signuplogin',
-          body: JSON.parse(loginData),
-        })
-        if (res.result === 'success') {
-          localStorage.setItem('console_token', res.data.access_token)
-          localStorage.setItem('refresh_token', res.data.refresh_token)
-        }
-        parent.window.postMessage({ finish: true }, '*')
-      }
-    }
-    process()
-  }, [login])
+  }, [router])
 
   return <div></div>
 }
