@@ -10,7 +10,6 @@ const SignUpLogin = () => {
   useEffect(() => {
     setIsIframe(true)
     const handleLoginData = (e: any) => {
-      console.log(e.data)
       if (e.data.env === 'developer') {
         const data = e.data
         const email = data.email
@@ -41,10 +40,12 @@ const SignUpLogin = () => {
     }
     process()
 
-    window.addEventListener('message', handleLoginData, false)
+    if (typeof window !== 'undefined')
+      window.addEventListener('message', handleLoginData, false)
 
     return () => {
-      window.removeEventListener('message', handleLoginData, false)
+      if (typeof window !== 'undefined')
+        window.removeEventListener('message', handleLoginData, false)
     }
   }, [])
 
