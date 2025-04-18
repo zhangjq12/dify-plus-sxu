@@ -45,8 +45,8 @@ const SignUpLogin = () => {
           localStorage.setItem('console_token', res.data.access_token)
           localStorage.setItem('refresh_token', res.data.refresh_token)
         }
-        parent.window.postMessage({ finish: true }, '*')
       }
+      parent.window.postMessage({ finish: true }, '*')
     }
     process()
   }, [loginData])
