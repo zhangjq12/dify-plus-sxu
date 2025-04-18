@@ -25,6 +25,16 @@ const SignUpLogin = () => {
       }
     }
 
+    if (typeof window !== 'undefined')
+      window.addEventListener('message', handleLoginData, false)
+
+    return () => {
+      if (typeof window !== 'undefined')
+        window.removeEventListener('message', handleLoginData, false)
+    }
+  }, [])
+
+  useEffect(() => {
     const process = async () => {
       if (loginData) {
         const res = await login({
@@ -39,15 +49,7 @@ const SignUpLogin = () => {
       }
     }
     process()
-
-    if (typeof window !== 'undefined')
-      window.addEventListener('message', handleLoginData, false)
-
-    return () => {
-      if (typeof window !== 'undefined')
-        window.removeEventListener('message', handleLoginData, false)
-    }
-  }, [])
+  }, [loginData])
 
   return <div></div>
 }
