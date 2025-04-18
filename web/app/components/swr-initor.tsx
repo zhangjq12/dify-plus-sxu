@@ -7,7 +7,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { fetchSetupStatus, login } from '@/service/common'
 import { useContext } from 'use-context-selector'
 import I18NContext from '@/context/i18n'
-import { getIsAgents, setIsIframe } from '@/utils/globalIsIframe'
+import { setIsIframe } from '@/utils/globalIsIframe'
 
 type SwrInitorProps = {
   children: ReactNode
@@ -33,9 +33,6 @@ const SwrInitor = ({
   const [init, setInit] = useState(false)
   const { locale } = useContext(I18NContext)
 
-  const [iframe, setIframe] = useState(false)
-  const [loginData, setLoginData] = useState<Record<string, any> | undefined>()
-
   const isSetupFinished = useCallback(async () => {
     try {
       if (localStorage.getItem('setup_status') === 'finished')
@@ -55,12 +52,12 @@ const SwrInitor = ({
   }, [])
 
   useEffect(() => {
-    const handleIframeLogin = (e: any) => {
+    const handleIframeLogin = async (e: any) => {
       if (e.data.env === 'developer') {
         const data = e.data
         const email = data.email
         const password = data.password
-        const loginDatas: Record<string, any> = {
+        const loginData: Record<string, any> = {
           email,
           password,
           language: locale,
@@ -68,8 +65,20 @@ const SwrInitor = ({
         }
 
         setIsIframe(true, false)
-        setIframe(true)
-        setLoginData(loginDatas)
+
+        const process = async () => {
+          const res = await login({
+            url: '/signuplogin',
+            body: loginData,
+          })
+          if (res.result === 'success') {
+            localStorage.setItem('console_token', res.data.access_token)
+            localStorage.setItem('refresh_token', res.data.refresh_token)
+          }
+        }
+
+        await process()
+        parent.window.postMessage({ finish: true }, '*')
       }
     }
 
@@ -88,17 +97,6 @@ const SwrInitor = ({
           router.replace('/install')
           return
         }
-        if (iframe && loginData && !getIsAgents()) {
-          const res = await login({
-            url: '/signuplogin',
-            body: loginData,
-          })
-          if (res.result === 'success') {
-            localStorage.setItem('console_token', res.data.access_token)
-            localStorage.setItem('refresh_token', res.data.refresh_token)
-          }
-          return
-        }
         if (!((consoleToken && refreshToken) || (consoleTokenFromLocalStorage && refreshTokenFromLocalStorage))) {
           router.replace('/signin')
           return
@@ -115,7 +113,7 @@ const SwrInitor = ({
         router.replace('/signin')
       }
     })()
-  }, [isSetupFinished, router, pathname, searchParams, consoleToken, refreshToken, consoleTokenFromLocalStorage, refreshTokenFromLocalStorage, iframe, loginData])
+  }, [isSetupFinished, router, pathname, searchParams, consoleToken, refreshToken, consoleTokenFromLocalStorage, refreshTokenFromLocalStorage])
 
   return init
     ? (
