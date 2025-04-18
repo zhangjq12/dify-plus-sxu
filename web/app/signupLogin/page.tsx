@@ -1,11 +1,11 @@
 'use client'
 
-import { login } from '@/service/common'
+import { login as loginPost } from '@/service/common'
 import { setIsIframe } from '@/utils/globalIsIframe'
 import { useEffect, useState } from 'react'
 
 const SignUpLogin = () => {
-  const [loginData, setLoginData] = useState<Record<string, any> | undefined>()
+  const [login, setLogin] = useState(false)
 
   useEffect(() => {
     setIsIframe(true)
@@ -21,7 +21,8 @@ const SignUpLogin = () => {
           remember_me: true,
         }
 
-        setLoginData(loginData)
+        localStorage.setItem('loginData', JSON.stringify(loginData))
+        setLogin(true)
       }
     }
 
@@ -36,10 +37,11 @@ const SignUpLogin = () => {
 
   useEffect(() => {
     const process = async () => {
+      const loginData = localStorage.getItem('loginData')
       if (loginData) {
-        const res = await login({
+        const res = await loginPost({
           url: '/signuplogin',
-          body: loginData,
+          body: JSON.parse(loginData),
         })
         if (res.result === 'success') {
           localStorage.setItem('console_token', res.data.access_token)
@@ -49,7 +51,7 @@ const SignUpLogin = () => {
       parent.window.postMessage({ finish: true }, '*')
     }
     process()
-  }, [loginData])
+  }, [login])
 
   return <div></div>
 }
