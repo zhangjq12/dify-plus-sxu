@@ -26,10 +26,13 @@ const SignUpLogin = () => {
       }
     }
 
-    if (typeof window !== 'undefined')
+    if (typeof window !== 'undefined') {
       window.addEventListener('message', handleLoginData, false)
-    else
-      router.refresh()
+    }
+    else {
+      parent.window.postMessage({ finish: false, isWindow: true }, '*')
+      return
+    }
 
     return () => {
       if (typeof window !== 'undefined')

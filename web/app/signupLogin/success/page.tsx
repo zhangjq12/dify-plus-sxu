@@ -19,7 +19,7 @@ const SignUpLoginSuccess = () => {
         parent.window.postMessage({ finish: true }, '*')
       }
       else {
-        parent.window.postMessage({ finish: false }, '*')
+        parent.window.postMessage({ finish: false, isWindow: false }, '*')
       }
     }
     process()
