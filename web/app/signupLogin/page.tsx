@@ -9,6 +9,7 @@ const SignUpLogin = () => {
 
   useEffect(() => {
     setIsIframe(true)
+    const loginDataFromLocalStorage = localStorage?.getItem('loginData')
     const handleLoginData = (e: any) => {
       if (e.data.env === 'developer') {
         const data = e.data
@@ -26,18 +27,12 @@ const SignUpLogin = () => {
       }
     }
 
-    if (typeof window !== 'undefined') {
-      window.addEventListener('message', handleLoginData, false)
-    }
-    else {
-      parent.window.postMessage({ finish: false, isWindow: true }, '*')
-      return
-    }
-
-    return () => {
-      if (typeof window !== 'undefined')
-        window.removeEventListener('message', handleLoginData, false)
-    }
+    if (typeof window !== 'undefined' && !loginDataFromLocalStorage)
+      window.onmessage = handleLoginData
+    else if(loginDataFromLocalStorage)
+      router.replace('/signupLogin/success')
+    else
+      parent.window.postMessage({ finish: true, isWindow: true }, '*')
   }, [router])
 
   return <div></div>
