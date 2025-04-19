@@ -7,10 +7,17 @@ import style from '../list.module.css'
 import Apps from './Apps'
 import AppContext from '@/context/app-context'
 import { LicenseStatus } from '@/types/feature'
+import { useSearchParams } from 'next/navigation'
+import { setIsIframe } from '@/utils/globalIsIframe'
 
 const AppList = () => {
   const { t } = useTranslation()
   const systemFeatures = useContextSelector(AppContext, v => v.systemFeatures)
+  const searchParams = useSearchParams()
+
+  const isIframe = searchParams.get('isIframe')
+
+  if (isIframe) setIsIframe(true)
 
   return (
     <div className='relative flex h-0 shrink-0 grow flex-col overflow-y-auto bg-background-body'>

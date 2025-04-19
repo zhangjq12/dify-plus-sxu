@@ -1,6 +1,5 @@
 'use client'
 
-import { setIsIframe } from '@/utils/globalIsIframe'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -8,7 +7,6 @@ const SignUpLogin = () => {
   const router = useRouter()
 
   useEffect(() => {
-    setIsIframe(true)
     const loginDataFromLocalStorage = localStorage?.getItem('loginData')
     const handleLoginData = (e: any) => {
       if (e.data.env === 'developer') {
