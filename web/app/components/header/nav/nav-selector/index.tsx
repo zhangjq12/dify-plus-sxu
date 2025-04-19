@@ -10,9 +10,6 @@ import { Menu, MenuButton, MenuItems, Transition } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
 import { debounce } from 'lodash-es'
 import cn from '@/utils/classnames'
-import AppIcon from '@/app/components/base/app-icon'
-import { AiText, ChatBot, CuteRobot } from '@/app/components/base/icons/src/vender/solid/communication'
-import { Route } from '@/app/components/base/icons/src/vender/solid/mapsAndTravel'
 import { useAppContext } from '@/context/app-context'
 import { useStore as useAppStore } from '@/app/components/app/store'
 import { FileArrow01, FilePlus01, FilePlus02 } from '@/app/components/base/icons/src/vender/line/files'
@@ -74,7 +71,7 @@ const NavSelector = ({ curNav, navs, createText, isApp, onCreate, onLoadmore }: 
                 shadow-lg
               "
             >
-              <div className="overflow-auto px-1 py-1" style={{ maxHeight: '50vh' }} onScroll={handleScroll}>
+              {/* <div className="overflow-auto px-1 py-1" style={{ maxHeight: '50vh' }} onScroll={handleScroll}>
                 {
                   navs.map(nav => (
                     <MenuItems key={nav.id}>
@@ -115,7 +112,7 @@ const NavSelector = ({ curNav, navs, createText, isApp, onCreate, onLoadmore }: 
                     </MenuItems>
                   ))
                 }
-              </div>
+              </div> */}
               {!isApp && isCurrentWorkspaceEditor && (
                 <MenuButton className='w-full p-1'>
                   <div onClick={() => onCreate('')} className={cn(
