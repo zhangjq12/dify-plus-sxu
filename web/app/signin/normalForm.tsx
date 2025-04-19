@@ -57,10 +57,10 @@ const NormalForm = () => {
     if (consoleToken || consoleTokenFromLocalStorage) {
       if (consoleToken) {
         localStorage.setItem('console_token', consoleToken)
-        window.location.href = `/explore/apps-center-extend?console_token=${consoleToken}`
+        window.location.href = `/apps?console_token=${consoleToken}`
       }
       else {
-        window.location.href = '/explore/apps-center-extend'
+        window.location.href = '/apps'
       }
     }
     const userAgent = navigator.userAgent.toLowerCase()

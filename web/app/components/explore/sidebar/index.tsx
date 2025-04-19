@@ -6,12 +6,10 @@ import { useContext } from 'use-context-selector'
 import { useSelectedLayoutSegments } from 'next/navigation'
 import Link from 'next/link'
 import Toast from '../../base/toast'
-import Item from './app-nav-item'
 import cn from '@/utils/classnames'
 import { fetchInstalledAppList as doFetchInstalledAppList, uninstallApp, updatePinStatus } from '@/service/explore'
 import ExploreContext from '@/context/explore-context'
 import Confirm from '@/app/components/base/confirm'
-import Divider from '@/app/components/base/divider'
 import useBreakpoints, { MediaType } from '@/hooks/use-breakpoints'
 import { useAppContext } from '@/context/app-context'
 
@@ -68,7 +66,7 @@ const SideBar: FC<IExploreSideBarProps> = ({
   const segments = useSelectedLayoutSegments()
   const lastSegment = segments.slice(-1)[0]
   const isDiscoverySelected = lastSegment === 'apps'
-  const isAppCenterSelected = lastSegment === 'apps-center-extend' // 二开部分 - 新增应用中心
+  // const isAppCenterSelected = lastSegment === 'apps-center-extend' // 二开部分 - 新增应用中心
   const { currentWorkspace } = useAppContext() // 二开部分 - “发现”页的隐藏显示逻辑
   const isChatSelected = lastSegment === 'chat'
   const { installedApps, setInstalledApps } = useContext(ExploreContext)
@@ -127,7 +125,7 @@ const SideBar: FC<IExploreSideBarProps> = ({
         </Link>
       </div>
       )}
-      {(currentWorkspace.role === 'owner') && <div className='mt-2'>
+      {/* {(currentWorkspace.role === 'owner') && <div className='mt-2'>
         <Link
           href='/explore/apps-center-extend'
           className={cn(isAppCenterSelected ? 'bg-white  font-semibold text-primary-600' : 'font-medium text-gray-700 hover:bg-gray-200', 'flex h-9 items-center gap-2 rounded-lg px-3 mobile:w-fit mobile:justify-center mobile:px-2 pc:w-full pc:justify-start')}
@@ -136,9 +134,9 @@ const SideBar: FC<IExploreSideBarProps> = ({
           {isAppCenterSelected ? <SelectedAppCenterIcon /> : <AppCenterIcon />}
           {!isMobile && <div className='text-sm'>{t('extend.sidebar.appCenter')}</div>}
         </Link>
-      </div>}
+      </div>} */}
       {/* ----------------------- 二开部分End 新增应用中心 ----------------------- */}
-      {installedApps.length > 0 && (
+      {/* {installedApps.length > 0 && (
         <div className='mt-10'>
           <p className='break-all pl-2 text-xs font-medium uppercase text-text-tertiary mobile:px-0'>{t('explore.sidebar.workspace')}</p>
           <div className='mt-3 space-y-1 overflow-y-auto overflow-x-hidden'
@@ -170,7 +168,7 @@ const SideBar: FC<IExploreSideBarProps> = ({
             ))}
           </div>
         </div>
-      )}
+      )} */}
       {showConfirm && (
         <Confirm
           title={t('explore.sidebar.delete.title')}
