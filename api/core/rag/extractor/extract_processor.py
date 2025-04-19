@@ -119,7 +119,8 @@ class ExtractProcessor:
                         )
                     elif file_extension in {".htm", ".html"}:
                         extractor = HtmlExtractor(file_path)
-                    elif file_extension == ".docx":
+                    # elif file_extension == ".docx":
+                    elif file_extension in {".docx", ".doc"}:
                         extractor = WordExtractor(file_path, upload_file.tenant_id, upload_file.created_by)
                     elif file_extension == ".csv":
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
@@ -149,7 +150,8 @@ class ExtractProcessor:
                         extractor = MarkdownExtractor(file_path, autodetect_encoding=True)
                     elif file_extension in {".htm", ".html"}:
                         extractor = HtmlExtractor(file_path)
-                    elif file_extension == ".docx":
+                    # elif file_extension == ".docx":
+                    elif file_extension in {".docx", ".doc"}:
                         extractor = WordExtractor(file_path, upload_file.tenant_id, upload_file.created_by)
                     elif file_extension == ".csv":
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
