@@ -105,6 +105,7 @@ class SignUpAndLoginApi(Resource):
         """Authenticate user and login."""
         parser = reqparse.RequestParser()
         parser.add_argument("email", type=email, required=True, location="json")
+        parser.add_argument("password", type=str, required=True, location="json")
         parser.add_argument("remember_me", type=bool, required=False, default=False, location="json")
         args = parser.parse_args()
 
@@ -116,9 +117,9 @@ class SignUpAndLoginApi(Resource):
             raise EmailPasswordLoginLimitError()
 
         try:
-            account = AccountService.authenticate(email=args["email"], password="abcd1234", isSignup=True)
+            account = AccountService.authenticate(email=args["email"], password=args["password"], isSignup=True)
             if account == None:
-                account = AccountService.create_account(email=args["email"], name=args["email"], interface_language="zh-CN", password="abcd1234", is_setup=True)
+                account = AccountService.create_account(email=args["email"], name=args["email"], interface_language="zh-CN", password=args["password"], is_setup=True)
                 # TenantService.create_owner_tenant_if_not_exist(account=account, name="SXU's workspace", is_setup=True)
                 super_admin_id = TenantExtendService.get_super_admin_id().id
                 super_admin_tenant_id = TenantExtendService.get_super_admin_tenant_id().id
