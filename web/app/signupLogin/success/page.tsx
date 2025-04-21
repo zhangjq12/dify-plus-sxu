@@ -16,6 +16,7 @@ const SignUpLoginSuccess = () => {
           localStorage.setItem('console_token', res.data.access_token)
           localStorage.setItem('refresh_token', res.data.refresh_token)
         }
+        localStorage.removeItem('loginData')
         parent.window.postMessage({ finish: true }, '*')
       }
       else {
