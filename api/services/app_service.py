@@ -64,17 +64,26 @@ class AppService:
         elif args["mode"] == "channel":
             filters.append(App.mode == AppMode.CHANNEL.value)
 
-        if args.get("is_created_by_me", False):
-            filters.append(App.created_by == user_id)
-        if args.get("name"):
-            name = args["name"][:30]
-            filters.append(App.name.ilike(f"%{name}%"))
-        if args.get("tag_ids"):
-            target_ids = TagService.get_target_ids_by_tag_ids("app", tenant_id, args["tag_ids"])
-            if target_ids:
-                filters.append(App.id.in_(target_ids))
-            else:
-                return None
+
+        # 所有请求都添加用户自己创建的app标识
+        filters.append(App.created_by == user_id)
+
+        # # 注释掉：判断是否用户自己的app
+        # if args.get("is_created_by_me", False):
+        #     filters.append(App.created_by == user_id)
+        #
+        # # 注释掉:根据name查询
+        # if args.get("name"):
+        #     name = args["name"][:30]
+        #     filters.append(App.name.ilike(f"%{name}%"))
+        #
+        # # 注释掉:根据tag查询
+        # if args.get("tag_ids"):
+        #     target_ids = TagService.get_target_ids_by_tag_ids("app", tenant_id, args["tag_ids"])
+        #     if target_ids:
+        #         filters.append(App.id.in_(target_ids))
+        #     else:
+        #         return None
 
         app_models = db.paginate(
             db.select(App).where(*filters).order_by(App.created_at.desc()),
