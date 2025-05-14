@@ -22,6 +22,9 @@ class InstalledAppsListApi(Resource):
     @account_initialization_required
     @marshal_with(installed_app_list_fields)
     def get(self):
+        # 获取安装的应用列表，直接返回空列表
+        return {"installed_apps": []}
+
         app_id = request.args.get("app_id", default=None, type=str)
         current_tenant_id = current_user.current_tenant_id
 
