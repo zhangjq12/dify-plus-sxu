@@ -1,5 +1,4 @@
-# from flask_restful import fields, marshal_with  # type: ignore
-from flask_restful import fields, marshal, marshal_with  # type: ignore
+from flask_restful import fields, marshal_with  # type: ignore
 from werkzeug.exceptions import Forbidden
 
 from configs import dify_config
@@ -54,8 +53,7 @@ class AppSiteApi(WebApiResource):
         "custom_config": fields.Raw(attribute="custom_config"),
     }
 
-    # 注释了原来的@marshal_with装饰器：不再使用装饰器自动序列化，改为手动处理。
-    # @marshal_with(app_fields)
+    @marshal_with(app_fields)
     def get(self, app_model, end_user):
         """Retrieve app site info."""
         # get site
@@ -68,13 +66,9 @@ class AppSiteApi(WebApiResource):
             raise Forbidden()
 
         can_replace_logo = FeatureService.get_features(app_model.tenant_id).can_replace_logo
-        # 注释原来的返回
-        # return AppSiteInfo(app_model.tenant, app_model, site, end_user.id, can_replace_logo)
-        # 使用新返回，手动序列化并移除app_id
-        app_site_info = AppSiteInfo(app_model.tenant, app_model, site, end_user.id, can_replace_logo)
-        data = marshal(app_site_info, self.app_fields)
-        del data['app_id']
-        return data
+
+        return AppSiteInfo(app_model.tenant, app_model, site, end_user.id, can_replace_logo)
+
 
 api.add_resource(AppSiteApi, "/site")
 
