@@ -44,7 +44,7 @@ class AppSiteApi(WebApiResource):
 
     app_fields = {
         # "app_id": fields.String,
-        # "end_user_id": fields.String,
+        "end_user_id": fields.String,
         "enable_site": fields.Boolean,
         "site": fields.Nested(site_fields),
         "model_config": fields.Nested(model_config_fields, allow_null=True),
